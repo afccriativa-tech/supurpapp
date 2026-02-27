@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="pt-AO" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0a0b0f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>SupurpApp v2.0</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root,[data-theme="dark"]{--bg:#0a0b0f;--sf:#111318;--sf2:#181b24;--bd:#2a2d3e;--bd2:#3a3d52;--gd:#e8b84b;--gd2:#b8882a;--glow:rgba(232,184,75,.15);--gsub:rgba(232,184,75,.07);--bl:#5b8af0;--tl:#4ecdc4;--rs:#e05c6e;--gn:#4caf7d;--pu:#9b7fe8;--or:#f0884a;--tx:#f0ede8;--tx2:#9096b0;--tx3:#555970;--sh:0 4px 24px rgba(0,0,0,.5)}
+[data-theme="light"]{--bg:#f5f4f0;--sf:#fff;--sf2:#f0eee9;--bd:#ddd9d0;--bd2:#c8c3b8;--gd:#b8882a;--gd2:#8a6420;--glow:rgba(184,136,42,.12);--gsub:rgba(184,136,42,.06);--bl:#3a6bd4;--tl:#2aada5;--rs:#c04050;--gn:#2d8a5a;--pu:#7055c8;--or:#d4642a;--tx:#1a1c24;--tx2:#5a5f78;--tx3:#9096b0;--sh:0 4px 24px rgba(0,0,0,.1)}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{font-size:16px}
+body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--tx);height:100vh;overflow:hidden;display:flex;transition:background .3s,color .3s}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:var(--sf2)}
+::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:4px}
+#sb{width:68px;background:var(--sf);border-right:1px solid var(--bd);display:flex;flex-direction:column;align-items:center;padding:16px 0 20px;gap:4px;z-index:100;transition:width .3s cubic-bezier(.4,0,.2,1);flex-shrink:0;overflow:hidden}
+#sb.exp{width:230px;align-items:stretch;padding:16px 10px 20px}
+.brand{display:flex;align-items:center;gap:10px;padding:8px 10px;margin-bottom:16px;width:100%}
+.brand-icon{width:40px;height:40px;background:linear-gradient(135deg,var(--gd),var(--gd2));border-radius:12px;display:flex;align-items:center;justify-content:center;font-family:"Cormorant Garamond",serif;font-size:20px;font-weight:700;color:#0a0b0f;flex-shrink:0;box-shadow:0 4px 16px var(--glow)}
+.brand-text{font-family:"Cormorant Garamond",serif;font-size:21px;font-weight:700;color:var(--gd);white-space:nowrap;opacity:0;transition:opacity .25s}
+.brand-ver{font-size:10px;color:var(--tx3);font-family:"JetBrains Mono",monospace;white-space:nowrap;opacity:0;transition:opacity .25s}
+#sb.exp .brand-text,#sb.exp .brand-ver{opacity:1}
+.nsl{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--tx3);padding:12px 10px 4px;white-space:nowrap;opacity:0;transition:opacity .25s}
+#sb.exp .nsl{opacity:1}
+.ni{display:flex;align-items:center;gap:11px;padding:9px 14px;border-radius:10px;cursor:pointer;transition:background .18s,color .18s;width:100%;color:var(--tx2);font-size:13.5px;font-weight:500;white-space:nowrap;user-select:none}
+.ni:hover{background:var(--sf2);color:var(--tx)}
+.ni.act{background:var(--gsub);color:var(--gd);border:1px solid rgba(232,184,75,.2)}
+.ni-ic{font-size:18px;flex-shrink:0;width:22px;text-align:center}
+.ni-lb{opacity:0;transition:opacity .2s}
+#sb.exp .ni-lb{opacity:1}
+#sb-tog{margin-top:auto;cursor:pointer;padding:10px 14px;color:var(--tx3);font-size:18px;width:100%;display:flex;align-items:center;justify-content:center;transition:color .18s;border-radius:10px}
+#sb.exp #sb-tog{justify-content:flex-end}
+#sb-tog:hover{color:var(--tx);background:var(--sf2)}
+#main{flex:1;overflow:hidden;display:flex;flex-direction:column}
+#topbar{background:var(--sf);border-bottom:1px solid var(--bd);padding:12px 28px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;gap:16px}
+#ca{flex:1;overflow-y:auto;padding:28px}
+.pg{display:none}
+.pg.act{display:block;animation:pi .3s cubic-bezier(.4,0,.2,1)}
+@keyframes pi{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.ptit{font-family:"Cormorant Garamond",serif;font-size:2.1rem;font-weight:600;line-height:1.1;margin-bottom:4px}
+.psub{font-size:13px;color:var(--tx2);margin-bottom:24px}
+.sh{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--tx2)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.ga{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
+.mb8{margin-bottom:8px}.mb16{margin-bottom:16px}.mb24{margin-bottom:24px}
+@media(max-width:1100px){.g4{grid-template-columns:1fr 1fr}}
+@media(max-width:800px){.g3,.g2{grid-template-columns:1fr}}
+@media(max-width:640px){body{flex-direction:column}#sb{width:100%!important;height:auto;flex-direction:row;padding:4px 2px;border-right:none;border-bottom:1px solid var(--bd);overflow-x:hidden;justify-content:space-around;gap:0}.brand,#sb-tog,.nsl{display:none!important}.ni-lb{display:none!important}.ni{padding:8px 6px;min-width:0;flex:1;flex-direction:column;gap:0;justify-content:center;border-radius:6px}.ni-ic{font-size:20px!important;width:auto!important;text-align:center}#main{height:calc(100vh - 52px)}#topbar{padding:10px 16px}#ca{padding:16px}.g2,.g3,.g4{grid-template-columns:1fr}}
+.card{background:var(--sf);border:1px solid var(--bd);border-radius:14px;padding:20px;transition:border-color .18s}
+.card:hover{border-color:var(--bd2)}
+.ch{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.sc{background:var(--sf);border:1px solid var(--bd);border-radius:14px;padding:18px 20px;position:relative;overflow:hidden;transition:transform .18s}
+.sc:hover{transform:translateY(-2px)}
+.sc::before{content:"";position:absolute;top:0;left:0;right:0;height:2px}
+.sc.gd::before{background:linear-gradient(90deg,var(--gd),transparent)}
+.sc.bl::before{background:linear-gradient(90deg,var(--bl),transparent)}
+.sc.gn::before{background:linear-gradient(90deg,var(--gn),transparent)}
+.sc.rs::before{background:linear-gradient(90deg,var(--rs),transparent)}
+.sc.tl::before{background:linear-gradient(90deg,var(--tl),transparent)}
+.sc.pu::before{background:linear-gradient(90deg,var(--pu),transparent)}
+.si{font-size:22px;margin-bottom:10px;display:block}
+.sl{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--tx2)}
+.sv{font-family:"Cormorant Garamond",serif;font-size:2rem;font-weight:700;line-height:1.1;margin:6px 0 2px}
+.ss{font-size:12px;color:var(--tx3)}
+.fr{display:flex;gap:12px;margin-bottom:14px;flex-wrap:wrap;align-items:flex-end}
+.fg{flex:1;min-width:140px}
+.fg.w2{flex:2}
+.fg label{display:block;font-size:11.5px;color:var(--tx2);margin-bottom:5px;font-weight:500}
+input,textarea,select{background:var(--sf2);border:1px solid var(--bd);border-radius:8px;color:var(--tx);font-family:"DM Sans",sans-serif;font-size:13.5px;padding:9px 13px;width:100%;outline:none;transition:border-color .18s,box-shadow .18s}
+input:focus,textarea:focus,select:focus{border-color:var(--gd);box-shadow:0 0 0 3px var(--glow)}
+input::placeholder,textarea::placeholder{color:var(--tx3)}
+select option{background:var(--sf)}
+textarea{resize:vertical;min-height:80px;line-height:1.5}
+input[type="range"]{padding:0;background:transparent;border:none;box-shadow:none;height:20px;accent-color:var(--gd)}
+input[type="range"]:focus{border-color:transparent;box-shadow:none}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:8px;font-family:"DM Sans",sans-serif;font-size:13.5px;font-weight:500;cursor:pointer;border:none;transition:all .18s;white-space:nowrap}
+.bp{background:var(--gd);color:#0a0b0f}
+.bp:hover{filter:brightness(1.08);box-shadow:0 4px 16px var(--glow)}
+.bs{background:var(--sf2);color:var(--tx);border:1px solid var(--bd)}
+.bs:hover{border-color:var(--gd);color:var(--gd)}
+.bg-b{background:transparent;color:var(--tx2);padding:7px 10px}
+.bg-b:hover{color:var(--tx);background:var(--sf2)}
+.bdn{background:rgba(224,92,110,.15);color:var(--rs);border:1px solid rgba(224,92,110,.3)}
+.bdn:hover{background:var(--rs);color:white}
+.bsc{background:rgba(76,175,125,.15);color:var(--gn);border:1px solid rgba(76,175,125,.3)}
+.bsm{padding:5px 12px;font-size:12px;border-radius:6px}
+.bfl{width:100%;justify-content:center}
+.bdg{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;white-space:nowrap}
+.dg-gd{background:var(--glow);border:1px solid var(--gd2);color:var(--gd)}
+.dg-bl{background:rgba(91,138,240,.12);border:1px solid var(--bl);color:var(--bl)}
+.dg-gn{background:rgba(76,175,125,.12);border:1px solid var(--gn);color:var(--gn)}
+.dg-rs{background:rgba(224,92,110,.12);border:1px solid var(--rs);color:var(--rs)}
+.dg-tl{background:rgba(78,205,196,.12);border:1px solid var(--tl);color:var(--tl)}
+.dg-pu{background:rgba(155,127,232,.12);border:1px solid var(--pu);color:var(--pu)}
+.dg-nt{background:var(--sf2);border:1px solid var(--bd);color:var(--tx2)}
+.p-a{background:rgba(224,92,110,.15);color:var(--rs);border:1px solid rgba(224,92,110,.3)}
+.p-m{background:rgba(232,184,75,.15);color:var(--gd);border:1px solid rgba(232,184,75,.3)}
+.p-b{background:rgba(76,175,125,.15);color:var(--gn);border:1px solid rgba(76,175,125,.3)}
+.pb-b{height:5px;background:var(--sf2);border-radius:3px;overflow:hidden}
+.pf{height:100%;border-radius:3px;transition:width .5s}
+.pf-gd{background:linear-gradient(90deg,var(--gd),var(--gd2))}
+.pf-bl{background:linear-gradient(90deg,var(--bl),#3a6bd4)}
+.pf-gn{background:linear-gradient(90deg,var(--gn),#2d8a5a)}
+.pf-tl{background:linear-gradient(90deg,var(--tl),#2aada5)}
+.pf-rs{background:linear-gradient(90deg,var(--rs),#c04050)}
+.pf-pu{background:linear-gradient(90deg,var(--pu),#7055c8)}
+.tabs{display:flex;gap:2px;margin-bottom:20px;border-bottom:1px solid var(--bd);overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{padding:9px 18px;font-size:13px;cursor:pointer;color:var(--tx2);border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .18s;white-space:nowrap;font-weight:500}
+.tab:hover{color:var(--tx)}
+.tab.act{color:var(--gd);border-bottom-color:var(--gd)}
+.tp{display:none}
+.tp.act{display:block;animation:pi .2s ease}
+.ti{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;background:var(--sf2);border:1px solid var(--bd);border-radius:10px;margin-bottom:7px;animation:si .2s ease}
+@keyframes si{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:none}}
+.ti:hover{border-color:var(--bd2)}
+.ti.dn{opacity:.55}
+.ti.dn .tt{text-decoration:line-through;color:var(--tx3)}
+.tc{width:20px;height:20px;border:2px solid var(--bd2);border-radius:50%;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .18s;font-size:11px;margin-top:2px}
+.tc:hover{border-color:var(--gn);background:rgba(76,175,125,.1)}
+.ti.dn .tc{background:var(--gn);border-color:var(--gn);color:white}
+.tt{font-size:13.5px;font-weight:500;line-height:1.3}
+.tm{font-size:11px;color:var(--tx3);display:flex;gap:8px;margin-top:3px;flex-wrap:wrap}
+.dbtn{background:none;border:none;color:var(--tx3);cursor:pointer;font-size:14px;padding:4px 6px;border-radius:6px;transition:all .18s}
+.dbtn:hover{color:var(--rs);background:rgba(224,92,110,.1)}
+.fr-row{display:flex;align-items:center;gap:12px;padding:11px 14px;border-bottom:1px solid var(--bd);font-size:13.5px;transition:background .15s;animation:si .2s ease}
+.fr-row:hover{background:var(--sf2)}
+.fr-row:last-child{border-bottom:none}
+.f-rc{background:rgba(76,175,125,.12)}.f-dp{background:rgba(224,92,110,.12)}.f-iv{background:rgba(91,138,240,.12)}
+.fic3{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.fd{flex:1;min-width:0}
+.fds{font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fsb{font-size:11px;color:var(--tx3)}
+.fam{font-family:"JetBrains Mono",monospace;font-size:13.5px;font-weight:500;flex-shrink:0}
+.fa-rc{color:var(--gn)}.fa-dp{color:var(--rs)}.fa-iv{color:var(--bl)}
+.ic{background:var(--sf2);border:1px solid var(--bd);border-radius:12px;padding:16px;border-left:3px solid var(--gd);animation:si .2s ease;transition:all .18s}
+.ic:hover{border-color:var(--gd)}
+.ic-t{font-weight:600;font-size:14px;margin-bottom:6px}
+.ic-d{font-size:12.5px;color:var(--tx2);line-height:1.55}
+.bk{background:var(--sf2);border:1px solid var(--bd);border-radius:12px;padding:14px;display:flex;gap:14px;animation:si .2s ease;margin-bottom:8px}
+.bk:hover{border-color:var(--bd2)}
+.bk-cv{width:46px;height:62px;border-radius:6px;background:linear-gradient(135deg,var(--gd),var(--gd2));display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.bk-inf{flex:1;min-width:0}
+.bk-t{font-weight:600;font-size:13.5px}
+.bk-a{font-size:12px;color:var(--tx2);margin:2px 0 8px}
+.de{background:var(--sf2);border:1px solid var(--bd);border-radius:12px;padding:16px;margin-bottom:12px;animation:si .2s ease}
+.dh{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;flex-wrap:wrap;gap:6px}
+.dt{font-size:13.5px;color:var(--tx2);line-height:1.65}
+.gi{background:var(--sf2);border:1px solid var(--bd);border-radius:12px;padding:16px;margin-bottom:10px;animation:si .2s ease}
+.gh{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px}
+.gt{font-weight:600;font-size:14px}
+.gpt{font-family:"JetBrains Mono",monospace;font-size:13px;color:var(--gd)}
+.gm{font-size:11.5px;color:var(--tx3);margin-bottom:10px}
+.pr{width:190px;height:190px;border-radius:50%;background:conic-gradient(var(--gd) 0%,var(--sf2) 0%);display:flex;align-items:center;justify-content:center;margin:20px auto;box-shadow:0 0 40px var(--glow);transition:background 1s linear}
+.pi2{width:148px;height:148px;background:var(--sf);border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.pt2{font-family:"Cormorant Garamond",serif;font-size:3.6rem;font-weight:600;color:var(--gd);letter-spacing:2px;line-height:1}
+.plb{font-size:11px;color:var(--tx3);margin-top:4px}
+.cw{position:relative;width:100%;max-height:240px;display:flex;align-items:center;justify-content:center}
+.cw canvas{max-height:220px}
+.qc{background:linear-gradient(135deg,rgba(232,184,75,.07),rgba(91,138,240,.04));border:1px solid rgba(232,184,75,.18);border-radius:16px;padding:22px 24px;margin-bottom:24px;position:relative}
+.qm{font-family:"Cormorant Garamond",serif;font-size:72px;line-height:.5;color:var(--gd);opacity:.25;position:absolute;top:16px;left:18px}
+.qt{font-family:"Cormorant Garamond",serif;font-size:1.15rem;font-style:italic;line-height:1.55;padding-left:24px}
+.qa{font-size:11.5px;color:var(--tx3);margin-top:8px;padding-left:24px}
+.roi-r{background:var(--gsub);border:1px solid rgba(232,184,75,.2);border-radius:12px;padding:18px;margin-top:16px}
+.roi-big{font-family:"Cormorant Garamond",serif;font-size:2rem;font-weight:700;color:var(--gd)}
+#modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px}
+#modal-bg.open{display:flex}
+#modal{background:var(--sf);border:1px solid var(--bd2);border-radius:16px;padding:28px;max-width:560px;width:100%;max-height:85vh;overflow-y:auto;animation:mi .25s cubic-bezier(.4,0,.2,1);box-shadow:var(--sh)}
+@keyframes mi{from{opacity:0;transform:scale(.96) translateY(8px)}to{opacity:1;transform:none}}
+.mh2{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.mt2{font-family:"Cormorant Garamond",serif;font-size:1.4rem;font-weight:600}
+#toast{position:fixed;bottom:24px;right:24px;background:var(--sf);border:1px solid var(--bd2);color:var(--tx);padding:12px 20px;border-radius:10px;font-size:13.5px;transform:translateY(80px);opacity:0;transition:all .3s cubic-bezier(.4,0,.2,1);z-index:10000;box-shadow:var(--sh);max-width:320px}
+#toast.show{transform:translateY(0);opacity:1}
+.nc{background:var(--sf2);border:1px solid var(--bd);border-radius:12px;padding:16px;margin-bottom:10px;border-left:3px solid var(--bl);animation:si .2s ease}
+.nt2{font-weight:600;font-size:14px;margin-bottom:4px}
+.nbod{font-size:13px;color:var(--tx2);line-height:1.65}
+.es{text-align:center;padding:44px 20px;color:var(--tx3)}
+.ei{font-size:38px;margin-bottom:10px}
+.es p{font-size:13.5px;line-height:1.5}
+.fb{display:flex;gap:10px;margin-bottom:16px;align-items:center;flex-wrap:wrap}
+.si2{background:var(--sf2);border:1px solid var(--bd);border-radius:8px;color:var(--tx);font-size:13px;padding:8px 12px;outline:none;flex:1;min-width:160px}
+.si2:focus{border-color:var(--gd)}
+.md-g{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.md-b{padding:7px 14px;border-radius:20px;background:var(--sf2);border:1px solid var(--bd);cursor:pointer;font-size:13px;transition:all .18s;user-select:none}
+.md-b:hover{border-color:var(--gd)}
+.md-b.act{background:var(--glow);border-color:var(--gd);color:var(--gd)}
+#ft{border-top:1px solid var(--bd);padding:8px 28px;display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--tx3);font-family:"JetBrains Mono",monospace;flex-shrink:0;flex-wrap:wrap;gap:4px}
+.fx{display:flex}.f1{flex:1}.fic{align-items:center}.fjb{justify-content:space-between}.g8{gap:8px}.g12{gap:12px}
+.tsm{font-size:12.5px}.txs{font-size:11px}.td{color:var(--tx2)}.tdm{color:var(--tx3)}
+.tgd{color:var(--gd)}.tgn{color:var(--gn)}.trs{color:var(--rs)}
+.mn{font-family:"JetBrains Mono",monospace}.sf2{font-family:"Cormorant Garamond",serif}.bld{font-weight:600}
+.tr{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dv{border:none;border-top:1px solid var(--bd);margin:20px 0}
+</style>
+</head>
+<body>
+<nav id="sb">
+  <div class="brand"><div class="brand-icon">S</div><div><div class="brand-text">SupurpApp</div><div class="brand-ver">v2.0</div></div></div>
+  <div class="nsl">Geral</div>
+  <div class="ni act" onclick="goTo('dashboard')"><span class="ni-ic">📊</span><span class="ni-lb">Dashboard</span></div>
+  <div class="ni" onclick="goTo('painel')"><span class="ni-ic">🌐</span><span class="ni-lb">Painel da Vida</span></div>
+  <div class="nsl">Gestão</div>
+  <div class="ni" onclick="goTo('plan')"><span class="ni-ic">📋</span><span class="ni-lb">Planeamento</span></div>
+  <div class="ni" onclick="goTo('fin')"><span class="ni-ic">💰</span><span class="ni-lb">Finanças</span></div>
+  <div class="ni" onclick="goTo('ideias')"><span class="ni-ic">💡</span><span class="ni-lb">Inovação</span></div>
+  <div class="nsl">Crescimento</div>
+  <div class="ni" onclick="goTo('aprender')"><span class="ni-ic">📚</span><span class="ni-lb">Aprendizado</span></div>
+  <div class="ni" onclick="goTo('reflex')"><span class="ni-ic">📖</span><span class="ni-lb">Reflexão</span></div>
+  <div class="nsl">Sistema</div>
+  <div class="ni" onclick="goTo('config')"><span class="ni-ic">⚙️</span><span class="ni-lb">Configurações</span></div>
+  <div id="sb-tog" onclick="toggleSB()">☰</div>
+</nav>
+<div id="main">
+  <div id="topbar">
+    <div class="fx fic g8">
+      <div id="pg-title" class="sf2" style="font-size:1.25rem;font-weight:600">Dashboard</div>
+    </div>
+    <div class="fx fic g8">
+      <div id="tb-date" class="tsm tdm mn"></div>
+      <button class="btn bs bsm" onclick="toggleTheme()">◑ Tema</button>
+    </div>
+  </div>
+  <div id="ca">
+
+<!-- DASHBOARD -->
+<div id="pg-dashboard" class="pg act">
+  <div class="fx fjb fic mb24" style="flex-wrap:wrap;gap:12px">
+    <div>
+      <div class="txs tdm bld" style="text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">Bem-vindo de volta</div>
+      <h1 class="ptit">Augusto Faztudo</h1>
+      <div class="tsm td" id="d-date-full"></div>
+    </div>
+    <span class="bdg dg-nt mn" id="d-sync">a carregar...</span>
+  </div>
+  <div class="qc mb24">
+    <div class="qm">"</div>
+    <div class="qt" id="d-qt"></div>
+    <div class="qa" id="d-qa"></div>
+    <div style="display:flex;gap:8px;margin-top:14px;padding-left:24px;flex-wrap:wrap">
+      <button class="btn bs bsm" onclick="nextQuote()">↺ Outra frase</button>
+      <button class="btn bg-b bsm" id="d-fav-btn" onclick="toggleQuoteFav()">☆ Guardar</button>
+    </div>
+  </div>
+  <div class="g4 mb24" id="d-stats"></div>
+  <div class="g2 mb24">
+    <div class="card"><div class="ch"><span class="sh">Tarefas — 7 dias</span></div><div class="cw"><canvas id="ch-tasks" height="180"></canvas></div></div>
+    <div class="card"><div class="ch"><span class="sh">Finanças por Origem</span></div><div class="cw"><canvas id="ch-fin-d" height="180"></canvas></div></div>
+  </div>
+  <div class="g2">
+    <div class="card"><div class="ch"><span class="sh">Metas em Progresso</span><button class="btn bg-b bsm" onclick="goTo('plan')">Ver →</button></div><div id="d-goals"></div></div>
+    <div class="card"><div class="ch"><span class="sh">Tarefas Urgentes</span><button class="btn bg-b bsm" onclick="goTo('plan')">Ver →</button></div><div id="d-tasks-l"></div></div>
+  </div>
+</div>
+
+<!-- PAINEL DA VIDA -->
+<div id="pg-painel" class="pg">
+  <div class="fx fjb fic mb24" style="flex-wrap:wrap;gap:12px">
+    <div><h1 class="ptit">Painel da Vida</h1><p class="psub">Equilíbrio integrado entre todas as dimensões do teu crescimento.</p></div>
+    <span class="bdg dg-gd" id="vida-score" style="font-size:13px;padding:6px 14px">Equilíbrio: —</span>
+  </div>
+  <div class="g3 mb24" id="vida-dims"></div>
+  <div class="g2 mb24">
+    <div class="card"><div class="ch"><span class="sh">Radar de Equilíbrio</span></div><div class="cw" style="max-height:260px"><canvas id="ch-radar" height="240"></canvas></div></div>
+    <div class="card"><div class="ch"><span class="sh">Actividade Recente</span></div><div id="vida-act"></div></div>
+  </div>
+  <div class="card" id="ai-card">
+    <div class="ch">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span class="sh">Advisor IA</span>
+        <span class="bdg dg-gn" id="ai-badge">Gemini</span>
+      </div>
+      <button class="btn bp bsm" id="ai-btn" onclick="runAIAnalysis()">🤖 Analisar com IA</button>
+    </div>
+    <div id="vida-ins"></div>
+    <div id="ai-response" style="display:none">
+      <div id="ai-text" style="font-size:13.5px;line-height:1.8;color:var(--tx2);white-space:pre-wrap"></div>
+    </div>
+    <div id="ai-no-key" style="display:none;padding:14px;background:rgba(155,127,232,.07);border-radius:10px;border:1px solid rgba(155,127,232,.2);font-size:13px;color:var(--tx2);line-height:1.7">
+      🔑 Para usar o Advisor IA real, adiciona a tua <strong style="color:var(--gn)">chave API do Groq</strong> (gratuita) nas <button class="btn bg-b bsm" onclick="goTo('config')" style="font-size:12px;padding:3px 8px">⚙️ Configurações</button>
+    </div>
+  </div>
+</div>
+
+<!-- PLANEAMENTO -->
+<div id="pg-plan" class="pg">
+  <div class="fx fjb fic mb24" style="flex-wrap:wrap;gap:12px">
+    <div><h1 class="ptit">Planeamento & Foco</h1><p class="psub">Tarefas, metas, subtarefas, Pomodoro e estatísticas.</p></div>
+    <button class="btn bp" onclick="openModal('task')">+ Nova Tarefa</button>
+  </div>
+  <div class="tabs">
+    <div class="tab act" onclick="planTab(0)">📋 Tarefas</div>
+    <div class="tab" onclick="planTab(1)">🎯 Metas</div>
+    <div class="tab" onclick="planTab(2)">⏱️ Foco</div>
+    <div class="tab" onclick="planTab(3)">📊 Estatísticas</div>
+  </div>
+  <div class="tp act" id="ptp0">
+    <div class="fb">
+      <input class="si2" placeholder="Pesquisar tarefas..." oninput="filterTasks(this.value)">
+      <select class="btn bs bsm" onchange="filterTasksCat(this.value)" style="width:auto;padding:6px 12px">
+        <option value="">Todas as Categorias</option>
+        <option>Profissional</option><option>AFC Criativa</option><option>Ibisner</option><option>Pessoal</option><option>Estudo</option><option>Saúde</option><option>Outro</option>
+      </select>
+      <select class="btn bs bsm" onchange="filterTasksPrio(this.value)" style="width:auto;padding:6px 12px">
+        <option value="">Todas as Prioridades</option><option value="alta">Alta</option><option value="média">Média</option><option value="baixa">Baixa</option>
+      </select>
+      <button class="btn bg-b bsm" onclick="clearDone()">🗑️ Limpar concluídas</button>
+    </div>
+    <div id="task-list"></div>
+  </div>
+  <div class="tp" id="ptp1">
+    <button class="btn bp mb16" onclick="openModal('goal')">+ Nova Meta</button>
+    <div id="goal-list"></div>
+  </div>
+  <div class="tp" id="ptp2">
+    <div class="g2" style="max-width:800px;margin:0 auto">
+      <div class="card" style="text-align:center;padding:32px">
+        <div class="sh mb16">Temporizador Foco</div>
+        <div class="pr" id="pomo-ring"><div class="pi2"><div class="pt2" id="pomo-disp">25:00</div><div class="plb" id="pomo-lbl">Foco</div></div></div>
+        <div style="display:flex;gap:8px;justify-content:center;margin:16px 0 20px">
+          <button class="btn bs bsm" onclick="setPomoMode(25,'Foco')">25 min</button>
+          <button class="btn bs bsm" onclick="setPomoMode(5,'Pausa Curta')">5 min</button>
+          <button class="btn bs bsm" onclick="setPomoMode(15,'Pausa Longa')">15 min</button>
+        </div>
+        <div style="display:flex;gap:10px;justify-content:center">
+          <button class="btn bp" id="pomo-btn" onclick="togglePomo()">▶ Iniciar</button>
+          <button class="btn bs" onclick="resetPomo()">↺ Repor</button>
+        </div>
+        <div class="fg" style="margin-top:20px;text-align:left"><label>Tarefa actual</label><input id="pomo-task" type="text" placeholder="Em que estás a trabalhar?"></div>
+      </div>
+      <div>
+        <div class="card mb16">
+          <div class="ch"><span class="sh">Sessões Hoje</span></div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:2.5rem;color:var(--gd);font-weight:700" id="pomo-sess">0</div>
+          <div class="pb-b" style="margin-top:8px"><div class="pf pf-gd" id="pomo-bar" style="width:0%"></div></div>
+          <div class="txs tdm" style="margin-top:4px">Meta: 8 ciclos/dia</div>
+        </div>
+        <div class="card"><div class="ch"><span class="sh">Por Actividade</span></div><div id="pomo-acts"></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="tp" id="ptp3">
+    <div class="g2 mb24">
+      <div class="card"><div class="ch"><span class="sh">Por Categoria</span></div><div class="cw"><canvas id="ch-tcat" height="200"></canvas></div></div>
+      <div class="card"><div class="ch"><span class="sh">Produtividade — 14 dias</span></div><div class="cw"><canvas id="ch-prod" height="200"></canvas></div></div>
+    </div>
+    <div class="g4" id="plan-sc"></div>
+  </div>
+</div>
+
+<!-- FINANCAS -->
+<div id="pg-fin" class="pg">
+  <div class="fx fjb fic mb24" style="flex-wrap:wrap;gap:12px">
+    <div><h1 class="ptit">Finanças & Investimentos</h1><p class="psub">Receitas, despesas, metas financeiras e simulador ROI.</p></div>
+    <div style="display:flex;gap:8px"><button class="btn bs" onclick="exportFinCSV()">↓ CSV</button><button class="btn bp" onclick="openModal('finlnc')">+ Lançamento</button></div>
+  </div>
+  <div class="g3 mb24" id="fin-stats"></div>
+  <div class="tabs">
+    <div class="tab act" onclick="finTab(0)">📒 Lançamentos</div>
+    <div class="tab" onclick="finTab(1)">📊 Gráficos</div>
+    <div class="tab" onclick="finTab(2)">🎯 Metas</div>
+    <div class="tab" onclick="finTab(3)">🧮 Simulador</div>
+  </div>
+  <div class="tp act" id="ftp0">
+    <div class="fb">
+      <input class="si2" placeholder="Pesquisar..." oninput="filterFin(this.value)">
+      <select class="btn bs bsm" id="fin-ft" onchange="renderFin()" style="width:auto;padding:6px 12px"><option value="">Todos</option><option value="receita">Receitas</option><option value="despesa">Despesas</option><option value="investimento">Investimentos</option></select>
+      <select class="btn bs bsm" id="fin-fo" onchange="renderFin()" style="width:auto;padding:6px 12px"><option value="">Todas as origens</option><option>AFC Criativa</option><option>Ibisner Solutions</option><option>Salário</option><option>Freelance</option><option>Investimento</option><option>Outro</option></select>
+      <button class="btn bdn bsm" onclick="clearFin()">Limpar</button>
+    </div>
+    <div id="fin-list"></div>
+  </div>
+  <div class="tp" id="ftp1">
+    <div class="g2 mb16">
+      <div class="card"><div class="ch"><span class="sh">Por Tipo</span></div><div class="cw"><canvas id="ch-ftype" height="220"></canvas></div></div>
+      <div class="card"><div class="ch"><span class="sh">Fluxo Mensal</span></div><div class="cw"><canvas id="ch-fflux" height="220"></canvas></div></div>
+    </div>
+    <div class="card"><div class="ch"><span class="sh">Receitas por Origem</span></div><div class="cw" style="max-height:200px"><canvas id="ch-forig" height="180"></canvas></div></div>
+  </div>
+  <div class="tp" id="ftp2">
+    <button class="btn bp mb16" onclick="openModal('fgoal')">+ Nova Meta Financeira</button>
+    <div id="fgoal-list"></div>
+  </div>
+  <div class="tp" id="ftp3">
+    <div class="card" style="max-width:520px">
+      <div class="ch"><span class="sh">Simulador — Juro Composto</span></div>
+      <div class="fr"><div class="fg"><label>Capital (Kz)</label><input id="s-cap" type="number" value="100000"></div><div class="fg"><label>Taxa (%)</label><input id="s-tax" type="number" value="10"></div></div>
+      <div class="fr"><div class="fg"><label>Período</label><input id="s-per" type="number" value="12"></div><div class="fg"><label>Frequência</label><select id="s-tip"><option value="mensal">Mensal</option><option value="anual">Anual</option></select></div><div class="fg"><label>Aporte/período (Kz)</label><input id="s-ap" type="number" value="0"></div></div>
+      <button class="btn bp" onclick="calcROI()">Calcular Retorno</button>
+      <div id="roi-res" style="display:none" class="roi-r"><div class="sh mb8">Resultado Projectado</div><div class="roi-big" id="roi-tot"></div><div class="tsm td" style="margin-top:6px" id="roi-det"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- IDEIAS -->
+<div id="pg-ideias" class="pg">
+  <div class="fx fjb fic mb24" style="flex-wrap:wrap;gap:12px">
+    <div><h1 class="ptit">Inovação & Ideias</h1><p class="psub">Repositório criativo com pontuação, mapa de valor e favoritos.</p></div>
+    <button class="btn bp" onclick="openModal('idea')">+ Nova Ideia</button>
+  </div>
+  <div class="tabs">
+    <div class="tab act" onclick="ideaTab(0)">💡 Repositório</div>
+    <div class="tab" onclick="ideaTab(1)">🗺️ Mapa de Valor</div>
+    <div class="tab" onclick="ideaTab(2)">⭐ Favoritas</div>
+  </div>
+  <div class="tp act" id="itp0">
+    <div class="fb">
+      <input class="si2" placeholder="Pesquisar ideias..." oninput="filterIdeas(this.value)">
+      <select class="btn bs bsm" onchange="filterIdeasArea(this.value)" style="width:auto;padding:6px 12px"><option value="">Todas as Áreas</option><option>Tecnologia</option><option>Negócio</option><option>Produto</option><option>Serviço</option><option>Educação</option><option>Social</option><option>Outro</option></select>
+      <select class="btn bs bsm" onchange="sortIdeas(this.value)" style="width:auto;padding:6px 12px"><option value="rec">Recentes</option><option value="imp">Maior Impacto</option><option value="via">Maior Viabilidade</option></select>
+    </div>
+    <div id="idea-list"></div>
+  </div>
+  <div class="tp" id="itp1">
+    <div class="g2 mb16">
+      <div class="card">
+        <div class="ch"><span class="sh">Problemas & Soluções</span><button class="btn bp bsm" onclick="openModal('mapitem')">+</button></div>
+        <div id="mapa-lst"></div>
+      </div>
+      <div class="card">
+        <div class="ch"><span class="sh">Matriz Impacto × Viabilidade</span></div>
+        <div style="position:relative;height:220px;background:var(--sf2);border-radius:8px;overflow:hidden">
+          <div style="position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr">
+            <div style="border-right:1px dashed var(--bd);border-bottom:1px dashed var(--bd);padding:6px;font-size:10px;color:var(--tx3)">Alto Impacto<br>Baixa Viab.</div>
+            <div style="border-bottom:1px dashed var(--bd);padding:6px;font-size:10px;color:var(--gn)">★ Alto Impacto<br>Alta Viab.</div>
+            <div style="border-right:1px dashed var(--bd);padding:6px;font-size:10px;color:var(--tx3)">Baixo Impacto<br>Baixa Viab.</div>
+            <div style="padding:6px;font-size:10px;color:var(--tx2)">Baixo Impacto<br>Alta Viab.</div>
+          </div>
+          <div id="matriz-dots" style="position:absolute;inset:0;pointer-events:none"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="tp" id="itp2"><div id="idea-favs"></div></div>
+</div>
+
+<!-- APRENDIZADO -->
+<div id="pg-aprender" class="pg">
+  <div class="fx fjb fic mb24" style="flex-wrap:wrap;gap:12px">
+    <div><h1 class="ptit">Crescimento & Aprendizado</h1><p class="psub">Biblioteca, notas, revisão espaçada e progresso cognitivo.</p></div>
+    <div style="display:flex;gap:8px"><button class="btn bs" onclick="openModal('note')">+ Nota</button><button class="btn bp" onclick="openModal('book')">+ Recurso</button></div>
+  </div>
+  <div class="g4 mb24" id="lrn-stats"></div>
+  <div class="tabs">
+    <div class="tab act" onclick="lrnTab(0)">📚 Biblioteca</div>
+    <div class="tab" onclick="lrnTab(1)">📝 Notas</div>
+    <div class="tab" onclick="lrnTab(2)">🔁 Revisão</div>
+    <div class="tab" onclick="lrnTab(3)">📊 Progresso</div>
+  </div>
+  <div class="tp act" id="ltp0">
+    <div class="fb">
+      <input class="si2" placeholder="Pesquisar biblioteca..." oninput="filterBooks(this.value)">
+      <select class="btn bs bsm" id="bk-fs" onchange="renderBooks()" style="width:auto;padding:6px 12px"><option value="">Todos os estados</option><option>📌 Para ver</option><option>📖 A ver/ler</option><option>✅ Concluído</option><option>⏸️ Pausado</option></select>
+    </div>
+    <div id="book-list"></div>
+  </div>
+  <div class="tp" id="ltp1"><div class="fb"><input class="si2" placeholder="Pesquisar notas..." oninput="filterNotes(this.value)"></div><div id="note-list"></div></div>
+  <div class="tp" id="ltp2"><div class="card mb16"><div class="ch"><span class="sh">Fila de Revisão Espaçada</span></div><div id="rev-list"></div></div></div>
+  <div class="tp" id="ltp3">
+    <div class="g2 mb16">
+      <div class="card"><div class="ch"><span class="sh">Por Tipo de Recurso</span></div><div class="cw"><canvas id="ch-ltype" height="200"></canvas></div></div>
+      <div class="card"><div class="ch"><span class="sh">Temas Mais Estudados</span></div><div id="top-topics"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- REFLEXAO -->
+<div id="pg-reflex" class="pg">
+  <div class="fx fjb fic mb24" style="flex-wrap:wrap;gap:12px">
+    <div><h1 class="ptit">Vida & Reflexão</h1><p class="psub">Diário, bem-estar e relatório de autoconsciência mensal.</p></div>
+    <button class="btn bp" onclick="openModal('diary')">+ Nova Entrada</button>
+  </div>
+  <div class="tabs">
+    <div class="tab act" onclick="refTab(0)">📖 Diário</div>
+    <div class="tab" onclick="refTab(1)">📊 Bem-estar</div>
+    <div class="tab" onclick="refTab(2)">📄 Relatório</div>
+  </div>
+  <div class="tp act" id="rtp0"><div id="diary-list"></div></div>
+  <div class="tp" id="rtp1">
+    <div class="g2 mb16">
+      <div class="card"><div class="ch"><span class="sh">Energia — 14 dias</span></div><div class="cw"><canvas id="ch-en" height="200"></canvas></div></div>
+      <div class="card"><div class="ch"><span class="sh">Produtividade — 14 dias</span></div><div class="cw"><canvas id="ch-pr" height="200"></canvas></div></div>
+    </div>
+    <div class="card"><div class="ch"><span class="sh">Humores Frequentes</span></div><div id="mood-stats"></div></div>
+  </div>
+  <div class="tp" id="rtp2">
+    <div class="card" style="max-width:680px">
+      <div class="ch"><span class="sh">Relatório Mensal</span><div style="display:flex;gap:8px"><select id="rel-mes" class="btn bs bsm" onchange="genReport()" style="padding:5px 12px"></select><button class="btn bs bsm" onclick="exportReport()">↓ TXT</button></div></div>
+      <div id="rel-cont"><div class="es"><div class="ei">📄</div><p>Selecciona um mês para gerar o relatório.</p></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIG -->
+<div id="pg-config" class="pg">
+  <div class="mb24"><h1 class="ptit">Configurações & Backup</h1><p class="psub">Personalização, dados e sobre o SupurpApp.</p></div>
+  <div class="g2">
+    <div>
+      <div class="card mb16">
+        <div class="ch"><span class="sh">Aparência</span></div>
+        <div class="fg mb16"><label>Tema</label><div style="display:flex;gap:10px;margin-top:8px"><button class="btn bs" id="t-dk" onclick="setTheme('dark')">🌙 Escuro</button><button class="btn bs" id="t-lt" onclick="setTheme('light')">☀️ Claro</button></div></div>
+        <hr class="dv">
+        <div class="fg"><label>Tamanho do Texto</label><div style="display:flex;gap:8px;margin-top:8px"><button class="btn bs bsm" onclick="setFS('14px')">Pequeno</button><button class="btn bs bsm" onclick="setFS('16px')">Normal</button><button class="btn bs bsm" onclick="setFS('18px')">Grande</button></div></div>
+      </div>
+      <div class="card mb16">
+        <div class="ch"><span class="sh">Sobre Mim</span></div>
+        <div style="display:flex;align-items:center;gap:16px;margin-bottom:16px">
+          <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--gd),var(--gd2));display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:700;color:#0a0b0f;flex-shrink:0">A</div>
+          <div><div class="bld" style="font-size:16px">Augusto Faztudo Chinjila</div><div class="tsm td">Gestor Público · Empreendedor · Inovador</div></div>
+        </div>
+        <div style="padding:14px;background:var(--gsub);border-radius:10px;border:1px solid rgba(232,184,75,.15);font-size:13px;color:var(--tx2);line-height:1.7"><strong style="color:var(--tx)">Missão:</strong> Crescer integralmente como profissional, empreendedor e ser humano, usando tecnologia e conhecimento como alavancas de impacto real.<br><br><strong style="color:var(--tx)">Empresas:</strong> AFC Criativa &amp; Ibisner Solutions<br><strong style="color:var(--tx)">Filosofia:</strong> <em>"Supurpência — utilidade, valor emocional e preferência natural."</em></div>
+      </div>
+      <div class="card">
+        <div class="ch"><span class="sh">🤖 Advisor IA — Groq</span><span class="bdg dg-gn">Grátis</span></div>
+        <p class="tsm td" style="margin-bottom:14px;line-height:1.6">Liga o SupurpApp ao Google Gemini para análise real dos teus dados. <strong style="color:var(--gn)">100% gratuito</strong> — sem cartão de crédito.</p>
+        <div class="fg mb16">
+          <label>Chave API Groq</label>
+          <div style="display:flex;gap:8px;margin-top:6px">
+            <input id="cfg-apikey" type="password" placeholder="gsk_..." style="flex:1;font-family:'JetBrains Mono',monospace;font-size:12px">
+            <button class="btn bp bsm" onclick="saveApiKey()" style="flex-shrink:0">Guardar</button>
+          </div>
+          <div id="cfg-apikey-status" style="margin-top:6px;font-size:12px;color:var(--tx3)"></div>
+        </div>
+        <div style="padding:12px;background:rgba(76,175,125,.06);border-radius:8px;border:1px solid rgba(76,175,125,.2);font-size:12px;color:var(--tx2);line-height:1.75">
+          <strong style="color:var(--gn)">Como obter a chave grátis:</strong><br>
+          1. Vai a <strong>console.groq.com</strong><br>
+          2. Cria uma conta gratuita (sem cartão)<br>
+          3. Clica em <strong>"API Keys"</strong> → <strong>"Create API Key"</strong><br>
+          4. Copia a chave (começa com <strong>gsk_...</strong>) e cola aqui<br><br>
+          🔒 A chave é guardada apenas no teu telemóvel.
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card mb16">
+        <div class="ch"><span class="sh">Dados & Backup</span></div>
+        <div style="margin-bottom:16px;padding:12px;background:var(--sf2);border-radius:8px" id="cfg-stats"></div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <button class="btn bs bfl" onclick="exportBackup()">💾 Exportar Backup (JSON)</button>
+          <button class="btn bs bfl" onclick="document.getElementById('imp-file').click()">📁 Importar Backup</button>
+          <input type="file" id="imp-file" accept=".json" style="display:none" onchange="importBackup(this)">
+          <button class="btn bdn bfl" onclick="resetApp()">⚠️ Repor Aplicação</button>
+        </div>
+      </div>
+      <div class="card mb16"><div class="ch"><span class="sh">Notificações PWA</span></div><button class="btn bs bfl mb16" onclick="reqNotif()">🔔 Activar Notificações</button><p class="txs tdm">Lembretes de tarefas e ciclos Pomodoro com o browser em segundo plano.</p></div>
+      <div class="card"><div class="ch"><span class="sh">Sobre o SupurpApp</span></div><div class="tsm td" style="line-height:1.8"><div class="fx fjb"><span>Versão</span><span class="mn">2.0.0</span></div><div class="fx fjb"><span>Tipo</span><span>PWA · Offline-first</span></div><div class="fx fjb"><span>Armazenamento</span><span>localStorage</span></div><div class="fx fjb"><span>Idioma</span><span>Português (Angola)</span></div></div><p class="txs tdm" style="margin-top:14px;padding-top:12px;border-top:1px solid var(--bd)">Criado para ser a plataforma central de crescimento pessoal e profissional do Augusto Faztudo Chinjila. Privado, seguro e offline.</p></div>
+    </div>
+  </div>
+</div>
+
+  </div><!-- /ca -->
+  <div id="ft"><span>SupurpApp v2.0 · AFC Criativa / Ibisner Solutions</span><span id="ft-sync" class="mn">—</span></div>
+</div><!-- /main -->
+<div id="modal-bg" onclick="if(event.target===this)closeModal()"><div id="modal"></div></div>
+<div id="toast"></div>
+<script>
+const K={T:'sa_t',G:'sa_g',F:'sa_f',FG:'sa_fg',I:'sa_i',B:'sa_b',N:'sa_n',R:'sa_r',P:'sa_p',S:'sa_s',QF:'sa_qf',M:'sa_m'};
+const DB={
+  get(k,d=[]){try{const r=localStorage.getItem(k);return r!==null?JSON.parse(r):d}catch{return d}},
+  set(k,v){try{localStorage.setItem(k,JSON.stringify(v));const m=DB.get(K.M,{});m.lastSaved=new Date().toISOString();localStorage.setItem(K.M,JSON.stringify(m))}catch(e){toast('⚠️ Armazenamento cheio!')}},
+  all(k){return DB.get(k,[])},
+  ins(k,item){const a=DB.all(k);a.unshift({...item,id:uid(),createdAt:new Date().toISOString()});DB.set(k,a);return a[0]},
+  upd(k,id,p){const a=DB.all(k),i=a.findIndex(x=>x.id===id);if(i>-1){a[i]={...a[i],...p};DB.set(k,a)}},
+  del(k,id){DB.set(k,DB.all(k).filter(x=>x.id!==id))},
+  find(k,id){return DB.all(k).find(x=>x.id===id)||null},
+  gs(k,d=null){return(DB.get(K.S,{}))[k]??d},
+  ss(k,v){const s=DB.get(K.S,{});s[k]=v;DB.set(K.S,s)},
+  stats(){let b=0;Object.values(K).forEach(k=>{const v=localStorage.getItem(k);if(v)b+=v.length*2});return{items:Object.values(K).reduce((s,k)=>{const v=DB.all(k);return s+(Array.isArray(v)?v.length:0)},0),kb:(b/1024).toFixed(2),last:DB.get(K.M,{}).lastSaved||null}},
+  export(){const d={_v:'2.0',_app:'SupurpApp',_exp:new Date().toISOString()};Object.entries(K).forEach(([n,k])=>{d[n]=DB.get(k,n==='S'?{}:[])});return d},
+  import(data){if(!data||data._app!=='SupurpApp')throw new Error('Ficheiro inválido.');Object.entries(K).forEach(([n,k])=>{if(data[n]!==undefined)DB.set(k,data[n])})}
+};
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
+function today(){return new Date().toISOString().split('T')[0]}
+function fmtKz(n){return Number(n).toLocaleString('pt-AO',{minimumFractionDigits:0,maximumFractionDigits:2})+' Kz'}
+function fmtD(iso,o={}){if(!iso)return'—';try{return new Date(iso).toLocaleDateString('pt-AO',{day:'numeric',month:'short',...o})}catch{return iso}}
+
+// ── NAV ──────────────────────────────────────────────
+const PAGES=['dashboard','painel','plan','fin','ideias','aprender','reflex','config'];
+const PTITLES={dashboard:'Dashboard',painel:'Painel da Vida',plan:'Planeamento & Foco',fin:'Finanças',ideias:'Inovação & Ideias',aprender:'Aprendizado',reflex:'Vida & Reflexão',config:'Configurações'};
+let curPg='dashboard';
+const _charts={};
+
+function goTo(pg){
+  document.querySelectorAll('.pg').forEach(p=>p.classList.remove('act'));
+  document.querySelectorAll('.ni').forEach(n=>n.classList.remove('act'));
+  const el=document.getElementById('pg-'+pg);if(!el)return;
+  el.classList.add('act');
+  document.querySelectorAll('.ni').forEach(n=>{if(n.getAttribute('onclick')?.includes("'"+pg+"'"))n.classList.add('act')});
+  document.getElementById('pg-title').textContent=PTITLES[pg]||pg;
+  curPg=pg;
+  if(pg==='dashboard')renderDash();
+  else if(pg==='painel')renderPainel();
+  else if(pg==='plan'){renderTasks();renderGoals();updPomoStats()}
+  else if(pg==='fin'){renderFinStats();renderFin();renderFGoals()}
+  else if(pg==='ideias')renderIdeas();
+  else if(pg==='aprender'){renderLrnStats();renderBooks()}
+  else if(pg==='reflex')renderDiary();
+  else if(pg==='config')renderConfig();
+  updTopbar();
+}
+function toggleSB(){document.getElementById('sb').classList.toggle('exp')}
+
+// tabs
+function tabSwitch(tabEls,tpEls,idx){
+  tabEls.forEach((t,i)=>t.classList.toggle('act',i===idx));
+  tpEls.forEach((t,i)=>t.classList.toggle('act',i===idx));
+}
+function planTab(i){const pg=document.getElementById('pg-plan');tabSwitch([...pg.querySelectorAll('.tab')],[...pg.querySelectorAll('.tp')],i);if(i===1)renderGoals();if(i===2)updPomoStats();if(i===3)setTimeout(renderPlanStats,80)}
+function finTab(i){const pg=document.getElementById('pg-fin');tabSwitch([...pg.querySelectorAll('.tab')],[...pg.querySelectorAll('.tp')],i);if(i===0)renderFin();if(i===1)setTimeout(renderFinCharts,80);if(i===2)renderFGoals()}
+function ideaTab(i){const pg=document.getElementById('pg-ideias');tabSwitch([...pg.querySelectorAll('.tab')],[...pg.querySelectorAll('.tp')],i);if(i===1)renderMatriz();if(i===2)renderIdeaFavs()}
+function lrnTab(i){const pg=document.getElementById('pg-aprender');tabSwitch([...pg.querySelectorAll('.tab')],[...pg.querySelectorAll('.tp')],i);if(i===1)renderNotes();if(i===2)renderRevisao();if(i===3)setTimeout(renderLrnCharts,80)}
+function refTab(i){const pg=document.getElementById('pg-reflex');tabSwitch([...pg.querySelectorAll('.tab')],[...pg.querySelectorAll('.tp')],i);if(i===1)setTimeout(renderRefCharts,80);if(i===2){populateRelMes();genReport()}}
+
+// ── TOAST ────────────────────────────────────────────
+let _tt=null;
+function toast(msg){const e=document.getElementById('toast');e.textContent=msg;e.classList.add('show');clearTimeout(_tt);_tt=setTimeout(()=>e.classList.remove('show'),2800)}
+
+// ── CHARTS ──────────────────────────────────────────
+function mkChart(id,cfg){if(_charts[id]){_charts[id].destroy();delete _charts[id]}const c=document.getElementById(id);if(!c||typeof Chart==='undefined')return null;_charts[id]=new Chart(c,cfg);return _charts[id]}
+const PAL=['#e8b84b','#5b8af0','#4ecdc4','#e05c6e','#4caf7d','#9b7fe8','#f0884a'];
+function gTx(){return getComputedStyle(document.documentElement).getPropertyValue('--tx2').trim()}
+function gBd(){return getComputedStyle(document.documentElement).getPropertyValue('--bd').trim()}
+function axOpts(){return{ticks:{color:gTx(),font:{family:'DM Sans',size:11}},grid:{color:gBd()}}}
+function chOpts(extra={}){return{responsive:true,maintainAspectRatio:true,plugins:{legend:{labels:{color:gTx(),font:{family:'DM Sans',size:11}}}},...extra}}
+
+// ── TOPBAR ──────────────────────────────────────────
+function updTopbar(){
+  const e=document.getElementById('tb-date');if(e)e.textContent=new Date().toLocaleDateString('pt-AO',{weekday:'short',day:'numeric',month:'short'});
+  const m=DB.get(K.M,{}),ft=document.getElementById('ft-sync');
+  if(ft&&m.lastSaved)ft.textContent='Guardado '+new Date(m.lastSaved).toLocaleTimeString('pt-AO',{hour:'2-digit',minute:'2-digit'});
+  const ds=document.getElementById('d-sync');if(ds&&m.lastSaved)ds.textContent='Guardado '+new Date(m.lastSaved).toLocaleTimeString('pt-AO',{hour:'2-digit',minute:'2-digit'});
+}
+function toggleTheme(){setTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark')}
+function setTheme(t){document.documentElement.setAttribute('data-theme',t);DB.ss('theme',t);toast(t==='dark'?'🌙 Tema escuro':'☀️ Tema claro')}
+function setFS(px){document.documentElement.style.fontSize=px;DB.ss('fontSize',px)}
+
+// ── QUOTES ──────────────────────────────────────────
+const QS=[
+  {t:'A disciplina é a ponte entre metas e realizações.',a:'Jim Rohn'},
+  {t:'O sucesso é a soma de pequenos esforços repetidos diariamente.',a:'Robert Collier'},
+  {t:'Não esperes. O momento nunca será perfeito. Começa onde estás.',a:'Napoleon Hill'},
+  {t:'A supurpência não é talento — é método, consciência e entrega.',a:'Augusto Faztudo Chinjila'},
+  {t:'Investe em ti próprio. É o melhor investimento que podes fazer.',a:'Warren Buffett'},
+  {t:'Grandes visões começam com acções pequenas e consistentes.',a:'Lao-Tsé'},
+  {t:'Não precisas de mais tempo. Precisas de decidir.',a:'Seth Godin'},
+  {t:'Faz o que podes, com o que tens, onde estás.',a:'Theodore Roosevelt'},
+  {t:'A melhor forma de predizer o futuro é criá-lo.',a:'Peter Drucker'},
+  {t:'Quem tem um porquê para viver, suporta quase qualquer como.',a:'Nietzsche'},
+  {t:'O conhecimento não é poder. O poder está na aplicação do conhecimento.',a:'Dale Carnegie'},
+  {t:'Empreendedorismo é viver alguns anos como a maioria não fará, para viver o resto como a maioria não pode.',a:'Warren Tracy'}
+];
+let _qi=new Date().getDate()%QS.length,_cq=QS[_qi];
+function renderQuote(){
+  document.getElementById('d-qt').textContent=_cq.t;
+  document.getElementById('d-qa').textContent='— '+_cq.a;
+  const favs=DB.all(K.QF),isFav=favs.some(q=>q.t===_cq.t),btn=document.getElementById('d-fav-btn');
+  if(btn){btn.textContent=isFav?'★ Favorita':'☆ Guardar';btn.className='btn '+(isFav?'bsc':'bg-b')+' bsm'}
+}
+function nextQuote(){_cq=QS[Math.floor(Math.random()*QS.length)];renderQuote()}
+function toggleQuoteFav(){const favs=DB.all(K.QF),i=favs.findIndex(q=>q.t===_cq.t);if(i===-1){favs.push(_cq);toast('★ Frase guardada!')}else{favs.splice(i,1);toast('Removida.')}DB.set(K.QF,favs);renderQuote()}
+
+// ── DASHBOARD ────────────────────────────────────────
+function renderDash(){
+  const now=new Date(),el=document.getElementById('d-date-full');
+  if(el)el.textContent=now.toLocaleDateString('pt-AO',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  renderQuote();
+  const tasks=DB.all(K.T),fins=DB.all(K.F),ideas=DB.all(K.I),books=DB.all(K.B);
+  const rec=fins.filter(f=>f.type==='receita').reduce((s,f)=>s+f.valor,0);
+  const des=fins.filter(f=>f.type==='despesa').reduce((s,f)=>s+f.valor,0);
+  const saldo=rec-des;
+  const ds=document.getElementById('d-stats');
+  if(ds)ds.innerHTML=[
+    {l:'Tarefas Pendentes',v:tasks.filter(t=>!t.done).length,s:'por concluir',c:'gd',i:'📋'},
+    {l:'Saldo Líquido',v:fmtKz(Math.abs(saldo)),s:saldo>=0?'positivo':'negativo',c:saldo>=0?'gn':'rs',i:'💰'},
+    {l:'Ideias',v:ideas.length,s:'no repositório',c:'bl',i:'💡'},
+    {l:'Recursos',v:books.length,s:'na biblioteca',c:'tl',i:'📚'}
+  ].map(s=>`<div class="sc ${s.c}"><span class="si">${s.i}</span><div class="sl">${s.l}</div><div class="sv">${s.v}</div><div class="ss">${s.s}</div></div>`).join('');
+  // goals
+  const ge=document.getElementById('d-goals');
+  const goals=DB.all(K.G).slice(0,5);
+  if(ge)ge.innerHTML=goals.length?goals.map((g,i)=>`<div style="margin-bottom:14px"><div class="fx fjb fic" style="margin-bottom:6px"><span class="tsm bld">${g.title}</span><span class="mn txs tgd">${g.pct||0}%</span></div><div class="pb-b"><div class="pf pf-${['gd','bl','gn','tl','rs'][i%5]}" style="width:${g.pct||0}%"></div></div></div>`).join(''):'<div class="es" style="padding:20px"><div class="ei">🎯</div><p>Sem metas.</p></div>';
+  // urgent tasks
+  const te=document.getElementById('d-tasks-l');
+  const urgTasks=tasks.filter(t=>!t.done&&t.priority==='alta').slice(0,6);
+  if(te)te.innerHTML=urgTasks.length?urgTasks.map(t=>`<div class="fx fic g8" style="padding:8px 0;border-bottom:1px solid var(--bd)"><span class="bdg p-a">${t.priority}</span><span class="tsm f1 tr">${t.title}</span></div>`).join(''):'<div class="es" style="padding:20px"><div class="ei">✓</div><p>Sem tarefas urgentes!</p></div>';
+  // charts
+  const lbl7=[],cr7=[],dn7=[];
+  for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);const iso=d.toISOString().split('T')[0];lbl7.push(d.toLocaleDateString('pt-AO',{weekday:'short'}));cr7.push(tasks.filter(t=>t.date===iso).length);dn7.push(tasks.filter(t=>t.done&&t.date===iso).length)}
+  setTimeout(()=>{
+    mkChart('ch-tasks',{type:'bar',data:{labels:lbl7,datasets:[{label:'Criadas',data:cr7,backgroundColor:'rgba(232,184,75,.35)',borderColor:'#e8b84b',borderWidth:1,borderRadius:4},{label:'Concluídas',data:dn7,backgroundColor:'rgba(76,175,125,.35)',borderColor:'#4caf7d',borderWidth:1,borderRadius:4}]},options:{...chOpts(),scales:{x:axOpts(),y:{...axOpts(),beginAtZero:true}}}});
+    const byO={};fins.filter(f=>f.type==='receita').forEach(f=>{byO[f.origem]=(byO[f.origem]||0)+f.valor});
+    const fL=Object.keys(byO),fD=Object.values(byO);
+    mkChart('ch-fin-d',{type:fL.length?'doughnut':'bar',data:{labels:fL.length?fL:['Sem dados'],datasets:[{data:fL.length?fD:[1],backgroundColor:PAL.map(c=>c+'aa'),borderColor:PAL,borderWidth:2}]},options:{...chOpts(),cutout:'65%',plugins:{legend:{position:'right',labels:{color:gTx(),font:{size:11},boxWidth:12}}}}});
+  },80);
+}
+
+// ── PAINEL DA VIDA ───────────────────────────────────
+const VDIMS=[
+  {k:'fin',l:'Financeiro',ic:'💰',cls:'gd'},{k:'prof',l:'Profissional',ic:'💼',cls:'bl'},
+  {k:'aprender',l:'Aprendizado',ic:'📚',cls:'tl'},{k:'bem',l:'Bem-estar',ic:'💚',cls:'gn'},
+  {k:'inov',l:'Inovação',ic:'💡',cls:'pu'},{k:'pes',l:'Pessoal',ic:'🌱',cls:'rs'}
+];
+function calcVida(){
+  const tasks=DB.all(K.T),goals=DB.all(K.G),fins=DB.all(K.F),ideas=DB.all(K.I),books=DB.all(K.B),refs=DB.all(K.R),fgoals=DB.all(K.FG),notes=DB.all(K.N);
+  const rec=fins.filter(f=>f.type==='receita').reduce((s,f)=>s+f.valor,0),des=fins.filter(f=>f.type==='despesa').reduce((s,f)=>s+f.valor,0);
+  const fgPct=fgoals.length?fgoals.reduce((s,g)=>s+(g.target>0?Math.min(100,(g.saved/g.target)*100):0),0)/fgoals.length:50;
+  const gPct=goals.length?goals.reduce((s,g)=>s+(g.pct||0),0)/goals.length:0;
+  const l14=refs.filter(r=>{const d=new Date();d.setDate(d.getDate()-14);return new Date(r.date)>=d});
+  const avgE=l14.filter(r=>r.energia).reduce((s,r)=>s+r.energia,0)/(l14.filter(r=>r.energia).length||1);
+  const avgP=l14.filter(r=>r.prod).reduce((s,r)=>s+r.prod,0)/(l14.filter(r=>r.prod).length||1);
+  const done=tasks.filter(t=>t.done).length,tot=tasks.length;
+  return{
+    fin:Math.min(100,Math.round((rec-des)>0?Math.min(70,((rec-des)/500000)*70)+fgPct*.3:fgPct*.5)),
+    prof:Math.min(100,Math.round(tot>0?(done/tot)*60+gPct*.4:gPct*.6)),
+    aprender:Math.min(100,Math.round(books.length>0?((books.filter(b=>b.status==='✅ Concluído').length/books.length)*50+Math.min(50,notes.length*5)):notes.length*5)),
+    bem:Math.min(100,Math.round((avgE+avgP)/2*10)),
+    inov:Math.min(100,Math.round(Math.min(100,ideas.length*10+ideas.filter(i=>i.status?.includes('execução')||i.status?.includes('Lançado')).length*20))),
+    pes:Math.min(100,Math.round(Math.min(100,refs.length*5+refs.filter(r=>r.gratitude).length*5)))
+  };
+}
+function renderPainel(){
+  const sc=calcVida(),avg=Math.round(Object.values(sc).reduce((s,v)=>s+v,0)/6);
+  const vs=document.getElementById('vida-score');if(vs)vs.textContent=`Equilíbrio: ${avg}%`;
+  const de=document.getElementById('vida-dims');
+  if(de)de.innerHTML=VDIMS.map(d=>{const v=sc[d.k]||0,pf=v>=70?'pf-gn':v>=40?'pf-gd':'pf-rs';return`<div class="sc ${d.cls}"><div class="fx fjb fic" style="margin-bottom:8px"><span style="font-size:22px">${d.ic}</span><span class="mn tgd" style="font-size:1.2rem;font-weight:700">${v}%</span></div><div class="sl">${d.l}</div><div class="pb-b" style="margin-top:10px"><div class="pf ${pf}" style="width:${v}%"></div></div></div>`}).join('');
+  const ae=document.getElementById('vida-act');
+  if(ae){const items=[...DB.all(K.T).slice(0,3).map(t=>({dt:t.date,tx:`📋 ${t.title}`,sb:t.cat})),...DB.all(K.F).slice(0,2).map(f=>({dt:f.date,tx:`💰 ${f.desc||f.origem}`,sb:f.type+' · '+fmtKz(f.valor)})),...DB.all(K.I).slice(0,2).map(i=>({dt:i.createdAt?.split('T')[0],tx:`💡 ${i.title}`,sb:i.area}))].sort((a,b)=>(b.dt||'')>(a.dt||'')?1:-1).slice(0,7);ae.innerHTML=items.length?items.map(it=>`<div style="padding:8px 0;border-bottom:1px solid var(--bd)"><div class="tsm tr">${it.tx}</div><div class="txs tdm">${it.sb}</div></div>`).join(''):'<div class="es" style="padding:20px"><p>Sem actividade recente.</p></div>'}
+  const ie=document.getElementById('vida-ins');
+  if(ie){const sorted=Object.entries(sc).sort((a,b)=>a[1]-b[1]),low=sorted[0],hi=sorted[sorted.length-1];const nm={fin:'Financeiro',prof:'Profissional',aprender:'Aprendizado',bem:'Bem-estar',inov:'Inovação',pes:'Pessoal'};const tips={fin:'Regista transacções e define metas financeiras.',prof:'Completa tarefas e actualiza metas.',aprender:'Adiciona recursos e cria notas.',bem:'Regista bem-estar no diário.',inov:'Adiciona ideias e avança para validação.',pes:'Escreve no diário regularmente.'};ie.innerHTML=[{t:'info',m:`Equilíbrio geral: ${avg}%. ${avg>=70?'Excelente!':avg>=40?'Há espaço para crescer.':'Activa mais dimensões.'}`},{t:'warn',m:`Mais fraca: "${nm[low[0]]}" (${low[1]}%). ${tips[low[0]]}`},{t:'ok',m:`Ponto forte: "${nm[hi[0]]}" (${hi[1]}%). Usa este momentum para elevar as outras.`}].map(i=>`<div class="fx g12 fic" style="padding:12px 0;border-bottom:1px solid var(--bd)"><span class="bdg dg-${i.t==='info'?'bl':i.t==='warn'?'rs':'gn'}" style="flex-shrink:0;align-self:flex-start;margin-top:2px">${i.t==='info'?'ℹ️':i.t==='warn'?'⚠️':'✅'}</span><span class="tsm td" style="line-height:1.6">${i.m}</span></div>`).join('')}
+  // Show last AI analysis if available
+  const lastAI=DB.gs('lastAIAnalysis');
+  const aiResp=document.getElementById('ai-response');
+  const aiTxt=document.getElementById('ai-text');
+  const aiBadge=document.getElementById('ai-badge');
+  const aiBtn=document.getElementById('ai-btn');
+  const noKey=document.getElementById('ai-no-key');
+  if(!DB.gs('apiKey')){if(noKey)noKey.style.display='block';if(aiBtn)aiBtn.style.display='none'}
+  else{if(noKey)noKey.style.display='none';if(aiBtn)aiBtn.style.display=''}
+  if(lastAI&&aiResp&&aiTxt){
+    aiResp.style.display='block';
+    const formatted=lastAI.text.replace(/\*\*(.+?)\*\*/g,'<strong style="color:var(--tx)">$1</strong>').replace(/^(\d+\.)\s/gm,'<span style="color:var(--gd);font-weight:600">$1</span> ').replace(/^[-•]\s/gm,'<span style="color:var(--gd)">▸</span> ');
+    aiTxt.innerHTML=formatted;
+    if(aiBadge)aiBadge.innerHTML='Gemini <span style="color:var(--gn)">✓</span>';
+    if(aiBtn)aiBtn.textContent='🔄 Nova análise';
+    const d=new Date(lastAI.date);const ago=Math.round((Date.now()-d)/60000);
+    ie.innerHTML+='<div class="txs tdm" style="margin-top:8px;padding-top:8px;border-top:1px solid var(--bd)">Última análise IA: há '+ago+' min</div>';
+  }
+  setTimeout(()=>{mkChart('ch-radar',{type:'radar',data:{labels:VDIMS.map(d=>d.ic+' '+d.l),datasets:[{data:VDIMS.map(d=>sc[d.k]||0),borderColor:'#e8b84b',backgroundColor:'rgba(232,184,75,.15)',borderWidth:2,pointBackgroundColor:'#e8b84b',pointRadius:4}]},options:{responsive:true,scales:{r:{min:0,max:100,ticks:{stepSize:25,color:'rgba(144,150,176,.6)',backdropColor:'transparent',font:{size:10}},grid:{color:gBd()},pointLabels:{color:gTx(),font:{size:11}}}},plugins:{legend:{display:false}}}})},80);
+}
+
+// ── TASKS ────────────────────────────────────────────
+let _tf={s:'',c:'',p:''};
+function filterTasks(v){_tf.s=v;renderTasks()}
+function filterTasksCat(v){_tf.c=v;renderTasks()}
+function filterTasksPrio(v){_tf.p=v;renderTasks()}
+function clearDone(){DB.set(K.T,DB.all(K.T).filter(t=>!t.done));renderTasks();toast('🗑️ Concluídas eliminadas.')}
+function toggleTask(id){const t=DB.find(K.T,id);if(t)DB.upd(K.T,id,{done:!t.done});renderTasks()}
+function toggleSub(tid,sid){const t=DB.find(K.T,tid);if(!t)return;const s=t.subtasks?.find(x=>x.id===sid);if(s){s.done=!s.done;DB.upd(K.T,tid,{subtasks:t.subtasks});renderTasks()}}
+function delTask(id){DB.del(K.T,id);renderTasks();toast('Tarefa eliminada.')}
+function renderTasks(){
+  let tasks=DB.all(K.T);
+  if(_tf.c)tasks=tasks.filter(t=>t.cat===_tf.c);
+  if(_tf.p)tasks=tasks.filter(t=>t.priority===_tf.p);
+  if(_tf.s)tasks=tasks.filter(t=>t.title.toLowerCase().includes(_tf.s.toLowerCase()));
+  const pO={alta:0,média:1,baixa:2};tasks.sort((a,b)=>(a.done?1:0)-(b.done?1:0)||(pO[a.priority]??1)-(pO[b.priority]??1));
+  const el=document.getElementById('task-list');if(!el)return;
+  if(!tasks.length){el.innerHTML='<div class="es"><div class="ei">📋</div><p>Sem tarefas. Adiciona a tua primeira!</p></div>';return}
+  el.innerHTML=tasks.map(t=>{
+    const subs=t.subtasks?.length?`<div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--bd)">${t.subtasks.map(s=>`<div class="fx fic g8" style="margin-bottom:4px;cursor:pointer" onclick="toggleSub('${t.id}','${s.id}')"><div style="width:14px;height:14px;border:1.5px solid var(--bd2);border-radius:3px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;${s.done?'background:var(--gn);border-color:var(--gn);color:white':''}">${s.done?'✓':''}</div><span class="txs ${s.done?'tdm':''}" style="${s.done?'text-decoration:line-through':''}">${s.title}</span></div>`).join('')}</div>`:'';
+    const tags=t.tags?.length?`<div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:5px">${t.tags.map(g=>`<span class="bdg dg-nt">${g}</span>`).join('')}</div>`:'';
+    return`<div class="ti ${t.done?'dn':''}"><div class="tc" onclick="toggleTask('${t.id}')">${t.done?'✓':''}</div><div style="flex:1;min-width:0"><div class="tt">${t.title}</div><div class="tm"><span>${t.cat}</span><span>${t.date||''}</span></div>${tags}${subs}</div><div style="display:flex;align-items:center;gap:6px;flex-shrink:0"><span class="bdg ${t.priority==='alta'?'p-a':t.priority==='média'?'p-m':'p-b'}">${t.priority}</span><button class="dbtn" title="Editar" onclick="editTask('${t.id}')">✎</button><button class="dbtn" onclick="delTask('${t.id}')">✕</button></div></div>`;
+  }).join('')
+}
+
+// ── GOALS ────────────────────────────────────────────
+function delGoal(id){DB.del(K.G,id);renderGoals();toast('Meta eliminada.')}
+function updGoalPct(id,v){DB.upd(K.G,id,{pct:parseInt(v)});const e=document.getElementById('gp-'+id),b=document.getElementById('gb-'+id);if(e)e.textContent=v+'%';if(b)b.style.width=v+'%'}
+function renderGoals(){
+  const goals=DB.all(K.G),el=document.getElementById('goal-list');if(!el)return;
+  if(!goals.length){el.innerHTML='<div class="es"><div class="ei">🎯</div><p>Sem metas. Define o teu próximo objectivo!</p></div>';return}
+  const cls=['pf-gd','pf-bl','pf-gn','pf-tl','pf-rs','pf-pu'];
+  el.innerHTML=goals.map((g,i)=>`<div class="gi"><div class="gh"><div style="flex:1;min-width:0"><div class="gt">${g.title}</div><div class="gm">${g.cat}${g.deadline?' · '+fmtD(g.deadline):''}${g.metric?' · '+g.metric:''}</div></div><div style="display:flex;align-items:center;gap:8px;flex-shrink:0"><span class="gpt" id="gp-${g.id}">${g.pct||0}%</span><button class="dbtn" title="Editar" onclick="editGoal('${g.id}')">✎</button><button class="dbtn" onclick="delGoal('${g.id}')">✕</button></div></div><div class="pb-b"><div class="pf ${cls[i%cls.length]}" id="gb-${g.id}" style="width:${g.pct||0}%"></div></div><div class="fx fic g8" style="margin-top:10px"><span class="txs tdm" style="white-space:nowrap">Progresso:</span><input type="range" min="0" max="100" value="${g.pct||0}" oninput="updGoalPct('${g.id}',this.value)" style="flex:1"></div></div>`).join('')
+}
+function renderPlanStats(){
+  const tasks=DB.all(K.T),done=tasks.filter(t=>t.done).length,tot=tasks.length;
+  const el=document.getElementById('plan-sc');
+  if(el)el.innerHTML=[{l:'Total',v:tot,s:'tarefas',c:'gd'},{l:'Concluídas',v:done,s:tot?Math.round(done/tot*100)+'%':'—',c:'gn'},{l:'Pendentes',v:tot-done,s:'por fazer',c:'rs'},{l:'Metas',v:DB.all(K.G).length,s:'activas',c:'bl'}].map(s=>`<div class="sc ${s.c}"><div class="sl">${s.l}</div><div class="sv">${s.v}</div><div class="ss">${s.s}</div></div>`).join('');
+  const byCat={};tasks.forEach(t=>{byCat[t.cat]=(byCat[t.cat]||0)+1});
+  mkChart('ch-tcat',{type:'bar',data:{labels:Object.keys(byCat),datasets:[{data:Object.values(byCat),backgroundColor:PAL.map(c=>c+'88'),borderRadius:6}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{x:axOpts(),y:{...axOpts(),beginAtZero:true}}}});
+  const lbl14=[],d14=[];for(let i=13;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);lbl14.push(d.toLocaleDateString('pt-AO',{day:'2-digit',month:'2-digit'}));d14.push(tasks.filter(t=>t.done&&t.date===d.toISOString().split('T')[0]).length)}
+  mkChart('ch-prod',{type:'line',data:{labels:lbl14,datasets:[{data:d14,borderColor:'#4caf7d',backgroundColor:'rgba(76,175,125,.1)',fill:true,tension:.4,pointRadius:3}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{x:axOpts(),y:{...axOpts(),beginAtZero:true}}}});
+}
+
+// ── POMODORO ─────────────────────────────────────────
+const POM={dur:25*60,left:25*60,run:false,iv:null};
+function setPomoMode(m,lbl){POM.dur=m*60;POM.left=POM.dur;POM.run=false;clearInterval(POM.iv);document.getElementById('pomo-btn').textContent='▶ Iniciar';document.getElementById('pomo-lbl').textContent=lbl;updPomoDisp();updPomoRing()}
+function togglePomo(){
+  if(POM.run){POM.run=false;clearInterval(POM.iv);document.getElementById('pomo-btn').textContent='▶ Retomar'}
+  else{POM.run=true;document.getElementById('pomo-btn').textContent='⏸ Pausar';
+    POM.iv=setInterval(()=>{POM.left--;updPomoDisp();updPomoRing();
+      if(POM.left<=0){clearInterval(POM.iv);POM.run=false;savePomo();updPomoStats();POM.left=POM.dur;updPomoDisp();updPomoRing();document.getElementById('pomo-btn').textContent='▶ Iniciar';toast('🍅 Ciclo completo!')}
+    },1000)}
+}
+function resetPomo(){clearInterval(POM.iv);POM.run=false;POM.left=POM.dur;document.getElementById('pomo-btn').textContent='▶ Iniciar';updPomoDisp();updPomoRing()}
+function updPomoDisp(){const m=String(Math.floor(POM.left/60)).padStart(2,'0'),s=String(POM.left%60).padStart(2,'0');const e=document.getElementById('pomo-disp');if(e)e.textContent=m+':'+s}
+function updPomoRing(){const p=((POM.dur-POM.left)/POM.dur)*100;const e=document.getElementById('pomo-ring');if(e)e.style.background=`conic-gradient(var(--gd) ${p}%,var(--sf2) ${p}%)`}
+function savePomo(){const task=document.getElementById('pomo-task')?.value||'Geral';const s=DB.get(K.P,{});const k=today();if(!s[k])s[k]=[];s[k].push({task,time:new Date().toISOString()});DB.set(K.P,s)}
+function updPomoStats(){const ps=DB.get(K.P,{}),td=ps[today()]||[];const c=td.length;const ce=document.getElementById('pomo-sess'),be=document.getElementById('pomo-bar');if(ce)ce.textContent=c;if(be)be.style.width=Math.min(100,(c/8)*100)+'%';const al=document.getElementById('pomo-acts');if(al){if(!td.length){al.innerHTML='<div class="es" style="padding:20px"><div class="ei">⏱️</div><p>Sem sessões hoje.</p></div>';return}const bt={};td.forEach(x=>{bt[x.task]=(bt[x.task]||0)+1});al.innerHTML=Object.entries(bt).map(([t,n])=>`<div class="fx fjb fic" style="padding:8px 0;border-bottom:1px solid var(--bd)"><span class="tsm">${t}</span><span class="mn txs tgd">${n} ciclos</span></div>`).join('')}}
+
+// ── FINANCES ─────────────────────────────────────────
+let _fsrch='';
+function filterFin(v){_fsrch=v;renderFin()}
+function renderFinStats(){
+  const fins=DB.all(K.F),rec=fins.filter(f=>f.type==='receita').reduce((s,f)=>s+f.valor,0),des=fins.filter(f=>f.type==='despesa').reduce((s,f)=>s+f.valor,0),saldo=rec-des;
+  const el=document.getElementById('fin-stats');if(!el)return;
+  el.innerHTML=[{l:'Receitas',v:fmtKz(rec),c:'gn',i:'💹'},{l:'Despesas',v:fmtKz(des),c:'rs',i:'📉'},{l:'Saldo Líquido',v:(saldo<0?'-':'')+fmtKz(Math.abs(saldo)),c:saldo>=0?'gd':'rs',i:'⚖️'}].map(s=>`<div class="sc ${s.c}"><span class="si">${s.i}</span><div class="sl">${s.l}</div><div class="sv">${s.v}</div></div>`).join('')
+}
+function renderFin(){
+  let fins=DB.all(K.F);
+  const ft=document.getElementById('fin-ft')?.value,fo=document.getElementById('fin-fo')?.value;
+  if(ft)fins=fins.filter(f=>f.type===ft);if(fo)fins=fins.filter(f=>f.origem===fo);
+  if(_fsrch)fins=fins.filter(f=>((f.desc||'')+(f.origem||'')).toLowerCase().includes(_fsrch.toLowerCase()));
+  const el=document.getElementById('fin-list');if(!el)return;
+  if(!fins.length){el.innerHTML='<div class="es"><div class="ei">💳</div><p>Sem lançamentos. Regista a tua primeira transacção!</p></div>';return}
+  const ic={receita:'💚',despesa:'🔴',investimento:'🔵'};
+  el.innerHTML=`<div class="card" style="padding:0;overflow:hidden">${fins.map(f=>`<div class="fr-row"><div class="fic3 f-${f.type==='receita'?'rc':f.type==='despesa'?'dp':'iv'}">${ic[f.type]}</div><div class="fd"><div class="fds">${f.desc||f.origem}</div><div class="fsb">${f.origem} · ${f.date}</div></div><div class="fam fa-${f.type==='receita'?'rc':f.type==='despesa'?'dp':'iv'}">${f.type==='despesa'?'-':'+'}${fmtKz(f.valor)}</div><button class="dbtn" title="Editar" onclick="editFin('${f.id}')">✎</button><button class="dbtn" onclick="delFin('${f.id}')">✕</button></div>`).join('')}</div>`
+}
+function delFin(id){DB.del(K.F,id);renderFinStats();renderFin();toast('Eliminado.')}
+function clearFin(){if(!confirm('Apagar todos os lançamentos?'))return;DB.set(K.F,[]);renderFinStats();renderFin();toast('🗑️ Eliminados.')}
+function renderFinCharts(){
+  const fins=DB.all(K.F);
+  const bT={receita:0,despesa:0,investimento:0};fins.forEach(f=>{bT[f.type]=(bT[f.type]||0)+f.valor});
+  mkChart('ch-ftype',{type:'doughnut',data:{labels:['Receitas','Despesas','Investimentos'],datasets:[{data:[bT.receita,bT.despesa,bT.investimento],backgroundColor:['#4caf7d88','#e05c6e88','#5b8af088'],borderColor:['#4caf7d','#e05c6e','#5b8af0'],borderWidth:2}]},options:{...chOpts(),cutout:'60%'}});
+  const mL=[],mR=[],mD=[];
+  for(let i=5;i>=0;i--){const d=new Date();d.setMonth(d.getMonth()-i);const k=d.toISOString().slice(0,7);mL.push(d.toLocaleDateString('pt-AO',{month:'short'}));mR.push(fins.filter(f=>f.type==='receita'&&f.date?.startsWith(k)).reduce((s,f)=>s+f.valor,0));mD.push(fins.filter(f=>f.type==='despesa'&&f.date?.startsWith(k)).reduce((s,f)=>s+f.valor,0))}
+  mkChart('ch-fflux',{type:'line',data:{labels:mL,datasets:[{label:'Receitas',data:mR,borderColor:'#4caf7d',backgroundColor:'rgba(76,175,125,.1)',fill:true,tension:.4},{label:'Despesas',data:mD,borderColor:'#e05c6e',backgroundColor:'rgba(224,92,110,.1)',fill:true,tension:.4}]},options:{...chOpts(),scales:{x:axOpts(),y:{...axOpts(),beginAtZero:true}}}});
+  const bO={};fins.filter(f=>f.type==='receita').forEach(f=>{bO[f.origem]=(bO[f.origem]||0)+f.valor});
+  mkChart('ch-forig',{type:'bar',data:{labels:Object.keys(bO),datasets:[{data:Object.values(bO),backgroundColor:PAL.map(c=>c+'88'),borderColor:PAL,borderWidth:1,borderRadius:6}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{x:axOpts(),y:{...axOpts(),beginAtZero:true}}}});
+}
+function calcROI(){
+  const cap=parseFloat(document.getElementById('s-cap').value)||0,tax=parseFloat(document.getElementById('s-tax').value)/100||0,per=parseInt(document.getElementById('s-per').value)||0,ap=parseFloat(document.getElementById('s-ap').value)||0;
+  let tot=cap;for(let i=0;i<per;i++){tot=tot*(1+tax)+ap}
+  const lucro=tot-cap-(ap*per),el=document.getElementById('roi-res');if(el)el.style.display='block';
+  document.getElementById('roi-tot').textContent=fmtKz(tot);
+  document.getElementById('roi-det').innerHTML=`Capital: <b>${fmtKz(cap)}</b> + Aportes: <b>${fmtKz(ap*per)}</b> + Juros: <b style="color:var(--gn)">${fmtKz(lucro)}</b> · ${per} períodos`;
+}
+function exportFinCSV(){
+  const fins=DB.all(K.F);if(!fins.length)return toast('Sem dados.');
+  const rows=fins.map(f=>`${f.type},${f.origem},${f.valor},${f.date},"${(f.desc||'').replace(/"/g,'""')}"`);
+  const b=new Blob(['Tipo,Origem,Valor,Data,Descrição\n'+rows.join('\n')],{type:'text/csv;charset=utf-8'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='financas-'+today()+'.csv';a.click();toast('📥 CSV exportado!')
+}
+function delFGoal(id){DB.del(K.FG,id);renderFGoals();toast('Meta eliminada.')}
+function updFGoal(id,v){DB.upd(K.FG,id,{saved:parseFloat(v)||0});renderFGoals()}
+function renderFGoals(){
+  const goals=DB.all(K.FG),el=document.getElementById('fgoal-list');if(!el)return;
+  if(!goals.length){el.innerHTML='<div class="es"><div class="ei">🏦</div><p>Sem metas financeiras.</p></div>';return}
+  el.innerHTML=goals.map(g=>{const p=g.target>0?Math.min(100,Math.round((g.saved/g.target)*100)):0;return`<div class="gi mb16"><div class="gh"><div><div class="gt">${g.title}</div><div class="gm">Meta: ${fmtKz(g.target)} · Poupado: ${fmtKz(g.saved)} · Falta: ${fmtKz(Math.max(0,g.target-g.saved))}${g.deadline?' · '+fmtD(g.deadline):''}</div></div><div style="display:flex;align-items:center;gap:8px;flex-shrink:0"><span class="gpt">${p}%</span><button class="dbtn" onclick="delFGoal('${g.id}')">✕</button></div></div><div class="pb-b"><div class="pf pf-gn" style="width:${p}%"></div></div><div class="fx fic g8" style="margin-top:10px"><span class="txs tdm" style="white-space:nowrap">Poupado:</span><input type="range" min="0" max="${g.target}" value="${g.saved}" step="${Math.max(1,Math.floor(g.target/100))}" oninput="updFGoal('${g.id}',this.value)" style="flex:1"></div></div>`}).join('')
+}
+
+// ── IDEAS ────────────────────────────────────────────
+let _iF={s:'',a:'',sort:'rec'};
+function filterIdeas(v){_iF.s=v;renderIdeas()}
+function filterIdeasArea(v){_iF.a=v;renderIdeas()}
+function sortIdeas(v){_iF.sort=v;renderIdeas()}
+function toggleFav(id){const i=DB.find(K.I,id);if(!i)return;DB.upd(K.I,id,{fav:!i.fav});renderIdeas();renderIdeaFavs();toast(i.fav?'Removida.':'⭐ Favorita!')}
+function delIdea(id){DB.del(K.I,id);renderIdeas();renderMatriz();renderIdeaFavs();toast('Ideia eliminada.')}
+function renderIdeas(){
+  let ideas=DB.all(K.I);
+  if(_iF.a)ideas=ideas.filter(i=>i.area===_iF.a);
+  if(_iF.s)ideas=ideas.filter(i=>(i.title+i.desc+(i.tags||[]).join()).toLowerCase().includes(_iF.s.toLowerCase()));
+  if(_iF.sort==='imp')ideas.sort((a,b)=>(b.impact||0)-(a.impact||0));
+  else if(_iF.sort==='via')ideas.sort((a,b)=>(b.viability||0)-(a.viability||0));
+  const el=document.getElementById('idea-list');if(!el)return;
+  if(!ideas.length){el.innerHTML='<div class="es"><div class="ei">💡</div><p>Sem ideias. Regista a tua primeira!</p></div>';return}
+  el.innerHTML='<div class="ga">'+ideas.map(i=>`<div class="ic"><div class="fx fjb fic"><div class="ic-t">${i.title}</div><div style="display:flex;gap:4px"><button class="btn bg-b bsm" onclick="toggleFav('${i.id}')" style="font-size:14px;padding:4px">${i.fav?'⭐':'☆'}</button><button class="dbtn" onclick="delIdea('${i.id}')">✕</button></div></div>${i.desc?`<div class="ic-d" style="margin-top:6px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical">${i.desc}</div>`:''}<div style="display:flex;justify-content:space-between;align-items:flex-end;margin-top:12px;flex-wrap:wrap;gap:6px"><div style="display:flex;gap:5px;flex-wrap:wrap"><span class="bdg dg-gd">${i.area}</span><span class="bdg dg-nt">${i.status}</span></div><div class="fx g8 txs td"><span>💥 ${i.impact||'—'}</span><span>⚙️ ${i.viability||'—'}</span></div></div>${i.tags?.length?`<div style="margin-top:6px;display:flex;gap:4px;flex-wrap:wrap">${i.tags.map(t=>`<span class="bdg dg-nt" style="font-size:10px">${t}</span>`).join('')}</div>`:''}</div>`).join('')+'</div>'
+}
+function renderIdeaFavs(){
+  const favs=DB.all(K.I).filter(i=>i.fav),el=document.getElementById('idea-favs');if(!el)return;
+  if(!favs.length){el.innerHTML='<div class="es"><div class="ei">⭐</div><p>Sem favoritas ainda.</p></div>';return}
+  el.innerHTML='<div class="ga">'+favs.map(i=>`<div class="ic" style="border-left-color:var(--gd)"><div class="ic-t">⭐ ${i.title}</div>${i.desc?`<div class="ic-d" style="margin-top:6px">${i.desc.slice(0,120)}...</div>`:''}<div style="display:flex;gap:5px;margin-top:10px"><span class="bdg dg-gd">${i.area}</span><span class="txs td">💥${i.impact} ⚙️${i.viability}</span></div></div>`).join('')+'</div>'
+}
+function renderMatriz(){
+  const ideas=DB.all(K.I),ml=document.getElementById('mapa-lst');
+  if(ml)ml.innerHTML=!ideas.length?'<div class="es" style="padding:20px"><div class="ei">🗺️</div><p>Adiciona ideias para ver o mapa.</p></div>':'<div style="max-height:200px;overflow-y:auto">'+ideas.slice(0,8).map(i=>`<div class="fx fic g8" style="padding:6px 0;border-bottom:1px solid var(--bd)"><span class="bdg dg-nt txs">${i.status?.split(' ')[0]}</span><span class="tsm f1 tr">${i.title}</span><span class="mn txs tgd">${i.impact||0}/${i.viability||0}</span></div>`).join('')+'</div>';
+  const dots=document.getElementById('matriz-dots');
+  if(dots)dots.innerHTML=ideas.map(i=>{const x=((i.viability||5)/10)*100,y=(1-(i.impact||5)/10)*100;return`<div title="${i.title}" style="position:absolute;left:${x}%;top:${y}%;transform:translate(-50%,-50%);width:10px;height:10px;border-radius:50%;background:var(--gd);opacity:.8"></div>`}).join('')
+}
+
+// ── LEARNING ─────────────────────────────────────────
+let _bS='',_nS='';
+function filterBooks(v){_bS=v;renderBooks()}
+function filterNotes(v){_nS=v;renderNotes()}
+function renderLrnStats(){
+  const books=DB.all(K.B),notes=DB.all(K.N);
+  const el=document.getElementById('lrn-stats');if(!el)return;
+  el.innerHTML=[{l:'Biblioteca',v:books.length,s:'recursos',c:'bl'},{l:'Em Leitura',v:books.filter(b=>b.status==='📖 A ver/ler').length,s:'actualmente',c:'gd'},{l:'Concluídos',v:books.filter(b=>b.status==='✅ Concluído').length,s:'recursos',c:'gn'},{l:'Notas',v:notes.length,s:'insights',c:'tl'}].map(s=>`<div class="sc ${s.c}"><div class="sl">${s.l}</div><div class="sv">${s.v}</div><div class="ss">${s.s}</div></div>`).join('')
+}
+function updBookPct(id,v){const p=parseInt(v);DB.upd(K.B,id,{pct:p,status:p===100?'✅ Concluído':p>0?'📖 A ver/ler':undefined});const e=document.getElementById('bpct-'+id),b=document.getElementById('bbar-'+id);if(e)e.textContent=p+'%';if(b)b.style.width=p+'%'}
+function delBook(id){DB.del(K.B,id);renderLrnStats();renderBooks();toast('Eliminado.')}
+function renderBooks(){
+  let books=DB.all(K.B);const sf=document.getElementById('bk-fs')?.value;
+  if(sf)books=books.filter(b=>b.status===sf);if(_bS)books=books.filter(b=>(b.title+b.author).toLowerCase().includes(_bS.toLowerCase()));
+  const el=document.getElementById('book-list');if(!el)return;
+  if(!books.length){el.innerHTML='<div class="es"><div class="ei">📚</div><p>Biblioteca vazia. Começa a construir conhecimento!</p></div>';return}
+  el.innerHTML=books.map(b=>`<div class="bk"><div class="bk-cv">${b.type?.split(' ')[0]||'📕'}</div><div class="bk-inf"><div class="bk-t">${b.title}</div><div class="bk-a">${b.author||'—'} · ${b.status}</div>${b.topics?.length?`<div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px">${b.topics.slice(0,3).map(t=>`<span class="bdg dg-nt">${t}</span>`).join('')}</div>`:''}<div class="pb-b"><div class="pf pf-bl" id="bbar-${b.id}" style="width:${b.pct||0}%"></div></div><div class="fx fjb fic" style="margin-top:5px"><span class="txs tdm"><span id="bpct-${b.id}">${b.pct||0}</span>% concluído</span><div style="display:flex;gap:4px">${b.link?`<a href="${b.link}" target="_blank" class="btn bg-b bsm">🔗</a>`:''}<button class="dbtn" onclick="delBook('${b.id}')">✕</button></div></div><input type="range" min="0" max="100" value="${b.pct||0}" oninput="updBookPct('${b.id}',this.value)" style="width:100%;margin-top:4px"></div></div>`).join('')
+}
+function markReviewed(id){const n=DB.find(K.N,id);if(!n)return;DB.upd(K.N,id,{lastReview:new Date().toISOString(),reviewCount:(n.reviewCount||0)+1});renderRevisao();toast('✅ Revisão marcada!')}
+function delNote(id){DB.del(K.N,id);renderLrnStats();renderNotes();renderRevisao();toast('Nota eliminada.')}
+function renderNotes(){
+  let notes=DB.all(K.N);if(_nS)notes=notes.filter(n=>(n.title+n.content).toLowerCase().includes(_nS.toLowerCase()));
+  const el=document.getElementById('note-list');if(!el)return;
+  if(!notes.length){el.innerHTML='<div class="es"><div class="ei">📝</div><p>Sem notas. Regista os teus insights!</p></div>';return}
+  el.innerHTML=notes.map(n=>`<div class="nc"><div class="fx fjb fic"><div><div class="nt2">${n.title}</div><div class="txs tdm">${n.source?'📖 '+n.source:''} ${'⚡'.repeat(n.difficulty||1)}</div></div><div style="display:flex;gap:6px;align-items:center">${n.needReview?'<span class="bdg dg-gd">Revisão</span>':''}<button class="dbtn" onclick="delNote('${n.id}')">✕</button></div></div><div class="nbod" style="margin-top:8px">${n.content}</div>${n.tags?.length?`<div style="margin-top:8px;display:flex;gap:4px;flex-wrap:wrap">${n.tags.map(t=>`<span class="bdg dg-nt">${t}</span>`).join('')}</div>`:''}<div class="txs tdm" style="margin-top:8px">${fmtD(n.createdAt)} · Revisto ${n.reviewCount||0}x</div></div>`).join('')
+}
+function renderRevisao(){
+  const notes=DB.all(K.N).filter(n=>n.needReview).sort((a,b)=>(a.lastReview||'0')<(b.lastReview||'0')?-1:1);
+  const el=document.getElementById('rev-list');if(!el)return;
+  if(!notes.length){el.innerHTML='<div class="es" style="padding:24px"><div class="ei">🔁</div><p>Sem notas para rever. Marca notas com "Agendar revisão".</p></div>';return}
+  el.innerHTML=notes.map(n=>`<div class="fx fjb fic" style="padding:12px 0;border-bottom:1px solid var(--bd)"><div><div class="bld tsm">${n.title}</div><div class="txs tdm">${n.lastReview?'Última: '+fmtD(n.lastReview):'Nunca revisto'} · ${n.reviewCount||0}x</div></div><button class="btn bsc bsm" onclick="markReviewed('${n.id}')">✓ Revisto</button></div>`).join('')
+}
+function renderLrnCharts(){
+  const books=DB.all(K.B),bT={};books.forEach(b=>{const k=(b.type||'📕').split(' ')[0];bT[k]=(bT[k]||0)+1});
+  mkChart('ch-ltype',{type:'doughnut',data:{labels:Object.keys(bT),datasets:[{data:Object.values(bT),backgroundColor:PAL.map(c=>c+'88'),borderWidth:2}]},options:{...chOpts(),cutout:'55%'}});
+  const tC={};books.forEach(b=>b.topics?.forEach(t=>{tC[t]=(tC[t]||0)+1}));
+  const sorted=Object.entries(tC).sort((a,b)=>b[1]-a[1]).slice(0,8),te=document.getElementById('top-topics');
+  if(te){if(!sorted.length){te.innerHTML='<div class="es" style="padding:20px"><p>Sem temas registados.</p></div>';return}const max=sorted[0][1];te.innerHTML=sorted.map(([tp,c])=>`<div style="margin-bottom:10px"><div class="fx fjb tsm" style="margin-bottom:6px"><span>${tp}</span><span class="mn tgd">${c}</span></div><div class="pb-b"><div class="pf pf-tl" style="width:${Math.round(c/max*100)}%"></div></div></div>`).join('')}
+}
+
+// ── DIARY ─────────────────────────────────────────────
+function delDiary(id){DB.del(K.R,id);renderDiary();toast('Entrada eliminada.')}
+function renderDiary(){
+  const refs=DB.all(K.R),el=document.getElementById('diary-list');if(!el)return;
+  if(!refs.length){el.innerHTML='<div class="es"><div class="ei">📖</div><p>O teu diário está em branco. A auto-reflexão é o início de toda a transformação.</p></div>';return}
+  el.innerHTML=refs.map(r=>`<div class="de"><div class="dh"><div class="fx fic g8" style="flex-wrap:wrap"><span style="font-size:16px">${r.mood||'—'}</span>${r.energia?`<span class="bdg dg-gd">⚡${r.energia}/10</span>`:''} ${r.prod?`<span class="bdg dg-bl">🎯${r.prod}/10</span>`:''}</div><div class="fx fic g8"><span class="txs tdm mn">${fmtD(r.date)}</span><button class="dbtn" onclick="delDiary('${r.id}')">✕</button></div></div><div class="dt">${r.text}</div>${r.wins?`<div style="margin-top:10px;padding:8px 12px;background:rgba(76,175,125,.08);border-radius:8px;font-size:12px;color:var(--gn);border:1px solid rgba(76,175,125,.15)">🏆 ${r.wins}</div>`:''} ${r.gratitude?`<div style="margin-top:8px;padding:8px 12px;background:var(--gsub);border-radius:8px;font-size:12px;color:var(--gd);border:1px solid rgba(232,184,75,.15)">🙏 ${r.gratitude}</div>`:''}</div>`).join('')
+}
+function renderRefCharts(){
+  const refs=DB.all(K.R),lbl14=[],e14=[],p14=[];
+  for(let i=13;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);const iso=d.toISOString().split('T')[0];lbl14.push(d.toLocaleDateString('pt-AO',{day:'2-digit',month:'2-digit'}));const dr=refs.filter(r=>r.date===iso);e14.push(dr.length?dr[dr.length-1].energia||null:null);p14.push(dr.length?dr[dr.length-1].prod||null:null)}
+  const lo={responsive:true,plugins:{legend:{display:false}},scales:{x:axOpts(),y:{...axOpts(),min:0,max:10,ticks:{stepSize:2}}},elements:{line:{tension:.4},point:{radius:4}}};
+  mkChart('ch-en',{type:'line',data:{labels:lbl14,datasets:[{data:e14,borderColor:'#e8b84b',backgroundColor:'rgba(232,184,75,.1)',fill:true,spanGaps:true}]},options:lo});
+  mkChart('ch-pr',{type:'line',data:{labels:lbl14,datasets:[{data:p14,borderColor:'#5b8af0',backgroundColor:'rgba(91,138,240,.1)',fill:true,spanGaps:true}]},options:lo});
+  const mC={};refs.forEach(r=>{mC[r.mood]=(mC[r.mood]||0)+1});const sorted=Object.entries(mC).sort((a,b)=>b[1]-a[1]).slice(0,8),me=document.getElementById('mood-stats');
+  if(me){if(!sorted.length){me.innerHTML='<div class="es" style="padding:20px"><p>Sem registos.</p></div>';return}const max=sorted[0][1];me.innerHTML=sorted.map(([m,c])=>`<div style="margin-bottom:10px"><div class="fx fjb tsm" style="margin-bottom:6px"><span>${m}</span><span class="mn tgd">${c}x</span></div><div class="pb-b"><div class="pf pf-gd" style="width:${Math.round(c/max*100)}%"></div></div></div>`).join('')}
+}
+function populateRelMes(){const sel=document.getElementById('rel-mes');if(!sel||sel.options.length>0)return;for(let i=0;i<6;i++){const d=new Date();d.setMonth(d.getMonth()-i);const k=d.toISOString().slice(0,7);const o=document.createElement('option');o.value=k;o.textContent=d.toLocaleDateString('pt-AO',{month:'long',year:'numeric'});sel.appendChild(o)}}
+let _repData=null;
+function genReport(){
+  populateRelMes();const mk=document.getElementById('rel-mes')?.value;if(!mk)return;
+  const refs=DB.all(K.R).filter(r=>r.date?.startsWith(mk)),el=document.getElementById('rel-cont');if(!el)return;
+  if(!refs.length){el.innerHTML='<div class="es"><div class="ei">📄</div><p>Sem entradas para este mês.</p></div>';return}
+  const avgE=refs.filter(r=>r.energia).reduce((s,r)=>s+r.energia,0)/(refs.filter(r=>r.energia).length||1);
+  const avgP=refs.filter(r=>r.prod).reduce((s,r)=>s+r.prod,0)/(refs.filter(r=>r.prod).length||1);
+  const mC={};refs.forEach(r=>{mC[r.mood]=(mC[r.mood]||0)+1});const topM=Object.entries(mC).sort((a,b)=>b[1]-a[1])[0]?.[0]||'—';
+  _repData={mk,refs,avgE,avgP,topM};
+  el.innerHTML=`<div style="border-bottom:1px solid var(--bd);margin-bottom:20px;padding-bottom:16px"><h2 class="sf2" style="font-size:1.5rem;margin-bottom:4px">Relatório de Autoconsciência</h2><div class="tsm td">${mk} · ${refs.length} entradas</div></div><div class="g2 mb24"><div class="sc gd"><div class="sl">Energia Média</div><div class="sv">${avgE.toFixed(1)}<span style="font-size:1rem">/10</span></div></div><div class="sc bl"><div class="sl">Produtividade Média</div><div class="sv">${avgP.toFixed(1)}<span style="font-size:1rem">/10</span></div></div></div><div style="margin-bottom:16px"><div class="sh mb8">Humor Dominante</div><div style="font-size:1.3rem">${topM}</div></div>${refs.filter(r=>r.wins).length?`<div style="margin-bottom:16px"><div class="sh mb8">Conquistas</div><div class="tsm td" style="line-height:1.7">${refs.filter(r=>r.wins).map(r=>r.wins).join(' · ')}</div></div>`:''} ${refs.filter(r=>r.gratitude).length?`<div style="margin-bottom:16px"><div class="sh mb8">Gratidão</div><div class="tsm td" style="line-height:1.7">${refs.filter(r=>r.gratitude).map(r=>r.gratitude).join(' · ')}</div></div>`:''}<div class="sh mb8">Entradas</div>${refs.slice(0,5).map(r=>`<div style="padding:10px 0;border-bottom:1px solid var(--bd)"><div class="fx fjb"><span class="tsm bld">${r.mood}</span><span class="txs tdm">${fmtD(r.date)}</span></div><div class="tsm td" style="margin-top:3px;line-height:1.55">${r.text.slice(0,120)}${r.text.length>120?'...':''}</div></div>`).join('')}${refs.length>5?`<div class="txs tdm" style="margin-top:10px">+ ${refs.length-5} entradas adicionais</div>`:''}`
+}
+function exportReport(){
+  if(!_repData)return toast('Gera primeiro o relatório.');
+  const{mk,refs,avgE,avgP,topM}=_repData;
+  let txt=`SUPURPAPP — RELATÓRIO DE AUTOCONSCIÊNCIA\nPeríodo: ${mk}\nEntradas: ${refs.length}\nEnergia média: ${avgE.toFixed(1)}/10\nProdutividade média: ${avgP.toFixed(1)}/10\nHumor dominante: ${topM}\n\n${'═'.repeat(40)}\n\n`;
+  refs.forEach(r=>{txt+=`[${r.date}] ${r.mood}\n${r.text}\n`;if(r.wins)txt+=`Conquistas: ${r.wins}\n`;if(r.gratitude)txt+=`Gratidão: ${r.gratitude}\n`;txt+='\n'});
+  const b=new Blob([txt],{type:'text/plain;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='reflexao-'+_repData.mk+'.txt';a.click();toast('📄 Exportado!')
+}
+
+// ── CONFIG ────────────────────────────────────────────
+function saveApiKey(){
+  const k=document.getElementById('cfg-apikey')?.value.trim();
+  if(!k)return toast('⚠️ Insere a chave.');
+  if(!k.startsWith('gsk_'))return toast('⚠️ Chave inválida. Deve começar com gsk_...');
+  DB.ss('apiKey',k);
+  document.getElementById('cfg-apikey-status').innerHTML='<span style="color:var(--gn)">✅ Chave Gemini guardada!</span>';
+  toast('🔑 Chave API guardada!');
+}
+function renderConfig(){
+  const savedKey=DB.gs('apiKey');
+  const keyInput=document.getElementById('cfg-apikey'),keyStatus=document.getElementById('cfg-apikey-status');
+  if(keyInput&&savedKey){keyInput.value=savedKey;if(keyStatus)keyStatus.innerHTML='<span style="color:var(--gn)">✅ Chave configurada</span>'}
+  const s=DB.stats(),el=document.getElementById('cfg-stats');
+  if(el)el.innerHTML=`<div class="fx fjb tsm mb8"><span class="td">Total de registos</span><span class="mn bld">${s.items}</span></div><div class="fx fjb tsm mb8"><span class="td">Armazenamento usado</span><span class="mn bld">${s.kb} KB</span></div><div class="fx fjb tsm"><span class="td">Último guardamento</span><span class="mn">${s.last?new Date(s.last).toLocaleTimeString('pt-AO',{hour:'2-digit',minute:'2-digit'}):'—'}</span></div>`;
+  const cur=document.documentElement.getAttribute('data-theme');
+  const dk=document.getElementById('t-dk'),lt=document.getElementById('t-lt');
+  if(dk)dk.className='btn '+(cur==='dark'?'bp':'bs');if(lt)lt.className='btn '+(cur==='light'?'bp':'bs');
+}
+function exportBackup(){const d=DB.export();const b=new Blob([JSON.stringify(d,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='supurpapp-backup-'+today()+'.json';a.click();toast('💾 Backup exportado!')}
+function importBackup(input){const file=input.files[0];if(!file)return;const r=new FileReader();r.onload=e=>{try{const d=JSON.parse(e.target.result);DB.import(d);toast('✅ Importado! A recarregar...');setTimeout(()=>location.reload(),1500)}catch(err){toast('❌ Erro: '+err.message)}};r.readAsText(file)}
+function resetApp(){if(!confirm('⚠️ Apagar TODOS os dados? Irreversível!'))return;if(!confirm('Confirmação final?'))return;Object.values(K).forEach(k=>localStorage.removeItem(k));toast('Reposto. A recarregar...');setTimeout(()=>location.reload(),1200)}
+async function reqNotif(){if(!('Notification' in window))return toast('Não suportado.');const p=await Notification.requestPermission();toast(p==='granted'?'🔔 Activadas!':'Permissão negada.')}
+
+// ── MODAL ─────────────────────────────────────────────
+let _selMood='';
+function openModal(type){const mb=document.getElementById('modal-bg'),m=document.getElementById('modal');m.innerHTML=getModal(type);mb.classList.add('open');_selMood='';setTimeout(()=>{const fi=m.querySelector('input[type="text"],input[type="number"],textarea');if(fi)fi.focus()},80)}
+function closeModal(){document.getElementById('modal-bg').classList.remove('open')}
+function mH(t){return`<div class="mh2"><span class="mt2">${t}</span><button class="btn bg-b" style="padding:7px 10px" onclick="closeModal()">✕</button></div>`}
+function mF(lbl,fn){return`<div style="display:flex;gap:10px;justify-content:flex-end;margin-top:4px"><button class="btn bs" onclick="closeModal()">Cancelar</button><button class="btn bp" onclick="${fn}()">+ ${lbl}</button></div>`}
+function selMood(el,mood){document.querySelectorAll('#m-md-g .md-b').forEach(b=>b.classList.remove('act'));el.classList.add('act');_selMood=mood}
+
+function getModal(type){
+  const CATS=['Profissional','AFC Criativa','Ibisner','Pessoal','Estudo','Saúde','Outro'];
+  const GCATS=['Financeira','Profissional','Educacional','Saúde','Familiar','Espiritual','Outro'];
+  const AREAS=['Tecnologia','Negócio','Produto','Serviço','Educação','Social','Outro'];
+  const STS=['💭 Conceito','🔬 Validando','⚙️ Prototipando','🚀 Em execução','✅ Lançado','🗑️ Arquivado'];
+  const BTYP=['📕 Livro','🎓 Curso','🎥 Vídeo','📄 Artigo','🎙️ Podcast','📁 PDF','🔗 Link'];
+  const BSTS=['📌 Para ver','📖 A ver/ler','✅ Concluído','⏸️ Pausado'];
+  const DOM=['Iniciante','Básico','Intermédio','Avançado','Especialista'];
+  const MOODS=['🙏 Grato','🔥 Motivado','🎯 Focado','😊 Feliz','😴 Cansado','😰 Ansioso','💪 Determinado','🤔 Reflexivo','😌 Satisfeito','😤 Frustrado'];
+  const ORIGS=['AFC Criativa','Ibisner Solutions','Salário','Freelance','Investimento','Outro'];
+  const FCATS=['Operacional','Fixo','Variável','Educação','Saúde','Lazer','Investimento'];
+
+  if(type==='task') return mH('Nova Tarefa')+`<div class="fr"><div class="fg w2"><label>Título *</label><input id="m-tt" type="text" placeholder="O que precisas de fazer?"></div></div><div class="fr"><div class="fg"><label>Categoria</label><select id="m-tc">${CATS.map(c=>`<option>${c}</option>`).join('')}</select></div><div class="fg"><label>Prioridade</label><select id="m-tp"><option value="alta">Alta</option><option value="média" selected>Média</option><option value="baixa">Baixa</option></select></div><div class="fg"><label>Data</label><input id="m-td" type="date" value="${today()}"></div></div><div class="fr"><div class="fg"><label>Etiquetas (vírgula)</label><input id="m-ttg" type="text" placeholder="urgente, reunião"></div><div class="fg"><label>Meta Associada</label><select id="m-tg"><option value="">— Nenhuma —</option>${DB.all(K.G).map(g=>`<option value="${g.id}">${g.title}</option>`).join('')}</select></div></div><div class="fg" style="margin-bottom:12px"><label>Notas</label><textarea id="m-tn" style="min-height:60px" placeholder="Detalhes..."></textarea></div><div class="fg" style="margin-bottom:16px"><label>Subtarefas (uma por linha)</label><textarea id="m-ts" style="min-height:60px" placeholder="Subtarefa 1&#10;Subtarefa 2"></textarea></div>`+mF('Adicionar','addTask');
+  if(type==='goal') return mH('Nova Meta')+`<div class="fr"><div class="fg w2"><label>Título *</label><input id="m-gtt" type="text" placeholder="Ex: Lançar produto em 6 meses"></div><div class="fg"><label>Categoria</label><select id="m-gc">${GCATS.map(c=>`<option>${c}</option>`).join('')}</select></div></div><div class="fr"><div class="fg w2"><label>Descrição</label><input id="m-gd" type="text" placeholder="Contextualiza a meta..."></div><div class="fg"><label>Prazo</label><input id="m-gdt" type="date"></div></div><div class="fr"><div class="fg"><label>Progresso (%)</label><input id="m-gp" type="number" min="0" max="100" value="0"></div><div class="fg w2"><label>Métrica / Indicador</label><input id="m-gm" type="text" placeholder="Ex: 500.000 Kz/mês"></div></div>`+mF('Definir Meta','addGoal');
+  if(type==='finlnc') return mH('Novo Lançamento')+`<div class="fr"><div class="fg"><label>Tipo *</label><select id="m-fty"><option value="receita">💚 Receita</option><option value="despesa">🔴 Despesa</option><option value="investimento">🔵 Investimento</option></select></div><div class="fg"><label>Origem</label><select id="m-for">${ORIGS.map(o=>`<option>${o}</option>`).join('')}</select></div><div class="fg"><label>Categoria</label><select id="m-fca">${FCATS.map(c=>`<option>${c}</option>`).join('')}</select></div></div><div class="fr"><div class="fg"><label>Valor (Kz) *</label><input id="m-fvl" type="number" placeholder="0.00" step="0.01"></div><div class="fg"><label>Data</label><input id="m-fdt" type="date" value="${today()}"></div></div><div class="fg" style="margin-bottom:16px"><label>Descrição</label><input id="m-fds" type="text" placeholder="Ex: Pagamento de projecto gráfico"></div>`+mF('Registar','addFin');
+  if(type==='fgoal') return mH('Nova Meta Financeira')+`<div class="fr"><div class="fg w2"><label>Descrição *</label><input id="m-fgt" type="text" placeholder="Ex: Poupar para casa própria"></div><div class="fg"><label>Valor Alvo (Kz)</label><input id="m-fgv" type="number" placeholder="500000"></div></div><div class="fr"><div class="fg"><label>Poupado até agora (Kz)</label><input id="m-fgs" type="number" value="0"></div><div class="fg"><label>Prazo</label><input id="m-fgd" type="date"></div></div>`+mF('Adicionar','addFGoal');
+  if(type==='idea') return mH('Nova Ideia')+`<div class="fr"><div class="fg w2"><label>Título *</label><input id="m-idt" type="text" placeholder="Nome da ideia ou conceito"></div><div class="fg"><label>Área</label><select id="m-ida">${AREAS.map(a=>`<option>${a}</option>`).join('')}</select></div></div><div class="fg" style="margin-bottom:12px"><label>Descrição / Proposta de Valor</label><textarea id="m-idd" placeholder="Que problema resolve? Que valor gera?"></textarea></div><div class="fr"><div class="fg"><label>Estado</label><select id="m-ids">${STS.map(s=>`<option>${s}</option>`).join('')}</select></div><div class="fg"><label>Tags (vírgula)</label><input id="m-idtg" type="text" placeholder="startup, mobile"></div></div><div class="fr"><div class="fg"><label>Impacto (1-10)</label><input id="m-idimp" type="number" min="1" max="10" value="5"></div><div class="fg"><label>Viabilidade (1-10)</label><input id="m-idvia" type="number" min="1" max="10" value="5"></div></div>`+mF('Guardar Ideia','addIdea');
+  if(type==='mapitem') return mH('Mapa de Valor')+`<p class="tsm td" style="margin-bottom:12px">Regista um problema observado e a solução potencial.</p><div class="fg" style="margin-bottom:12px"><label>Problema Observado *</label><textarea id="m-mpp" placeholder="Que problema vês no mercado?"></textarea></div><div class="fg" style="margin-bottom:16px"><label>Solução Potencial</label><textarea id="m-mps" placeholder="Que solução propões?"></textarea></div>`+mF('Adicionar','addMapItem');
+  if(type==='book') return mH('Adicionar Recurso')+`<div class="fr"><div class="fg w2"><label>Título *</label><input id="m-bkt" type="text" placeholder="Nome do livro, curso ou vídeo"></div><div class="fg"><label>Autor / Fonte</label><input id="m-bka" type="text" placeholder="Autor ou plataforma"></div></div><div class="fr"><div class="fg"><label>Tipo</label><select id="m-bkty">${BTYP.map(t=>`<option>${t}</option>`).join('')}</select></div><div class="fg"><label>Estado</label><select id="m-bkst">${BSTS.map(s=>`<option>${s}</option>`).join('')}</select></div><div class="fg"><label>Domínio</label><select id="m-bkd">${DOM.map(d=>`<option>${d}</option>`).join('')}</select></div></div><div class="fr"><div class="fg"><label>Progresso (%)</label><input id="m-bkp" type="number" min="0" max="100" value="0"></div><div class="fg w2"><label>Temas (vírgula)</label><input id="m-bktp" type="text" placeholder="gestão, finanças"></div></div><div class="fg" style="margin-bottom:12px"><label>Link / URL</label><input id="m-bkl" type="url" placeholder="https://..."></div><div class="fg" style="margin-bottom:16px"><label>Notas rápidas</label><textarea id="m-bkn" style="min-height:60px" placeholder="Primeiras impressões..."></textarea></div>`+mF('Adicionar','addBook');
+  if(type==='note') return mH('Nova Nota')+`<div class="fr"><div class="fg w2"><label>Título / Conceito *</label><input id="m-ntt" type="text" placeholder="Tema ou conceito aprendido"></div><div class="fg"><label>Fonte</label><input id="m-nts" type="text" placeholder="Livro, curso..."></div></div><div class="fg" style="margin-bottom:12px"><label>Conteúdo *</label><textarea id="m-ntc" style="min-height:120px" placeholder="Resume o que aprendeste. Usa exemplos e analogias..."></textarea></div><div class="fr"><div class="fg"><label>Tags (vírgula)</label><input id="m-nttg" type="text" placeholder="gestão, angola"></div><div class="fg"><label>Dificuldade</label><select id="m-ntd"><option value="1">⚡ Fácil</option><option value="2">⚡⚡ Médio</option><option value="3" selected>⚡⚡⚡ Difícil</option></select></div><div class="fg" style="display:flex;align-items:center;gap:8px;padding-top:18px"><input type="checkbox" id="m-ntr" style="width:auto"><label for="m-ntr" style="margin-bottom:0;cursor:pointer">Agendar revisão</label></div></div><div style="height:4px"></div>`+mF('Guardar Nota','addNote');
+  if(type==='diary') return mH('Entrada do Diário')+`<div style="margin-bottom:14px"><div class="txs td bld" style="margin-bottom:8px">Como te sentes hoje?</div><div class="md-g" id="m-md-g">${MOODS.map(m=>`<div class="md-b" onclick="selMood(this,'${m}')">${m}</div>`).join('')}</div></div><div class="fr"><div class="fg"><label>Energia (1-10)</label><input id="m-re" type="number" min="1" max="10" placeholder="8"></div><div class="fg"><label>Produtividade (1-10)</label><input id="m-rp" type="number" min="1" max="10" placeholder="7"></div><div class="fg"><label>Data</label><input id="m-rd" type="date" value="${today()}"></div></div><div class="fg" style="margin-bottom:12px"><label>Reflexão do Dia *</label><textarea id="m-rt" style="min-height:110px" placeholder="O que aconteceu? O que aprendi? O que te move?"></textarea></div><div class="fg" style="margin-bottom:12px"><label>3 Conquistas do dia</label><input id="m-rw" type="text" placeholder="Terminei o relatório, fiz exercício..."></div><div class="fg" style="margin-bottom:16px"><label>Gratidão</label><input id="m-rg" type="text" placeholder="Pelo que és grato hoje?"></div>`+mF('Guardar','addDiary');
+  return '<p>Modal não encontrado.</p>'
+}
+
+// ── SAVE FUNCTIONS ────────────────────────────────────
+function addTask(){
+  const title=document.getElementById('m-tt')?.value.trim();if(!title)return toast('⚠️ Insere o título.');
+  const tags=(document.getElementById('m-ttg')?.value||'').split(',').map(t=>t.trim()).filter(Boolean);
+  const subs=(document.getElementById('m-ts')?.value||'').split('\n').map(s=>s.trim()).filter(Boolean).map(s=>({id:uid(),title:s,done:false}));
+  DB.ins(K.T,{title,cat:document.getElementById('m-tc')?.value||'Pessoal',priority:document.getElementById('m-tp')?.value||'média',date:document.getElementById('m-td')?.value||today(),notes:document.getElementById('m-tn')?.value||'',tags,subtasks:subs,goalId:document.getElementById('m-tg')?.value||'',done:false});
+  closeModal();renderTasks();toast('✅ Tarefa adicionada!')
+}
+function addGoal(){
+  const title=document.getElementById('m-gtt')?.value.trim();if(!title)return toast('⚠️ Insere o título.');
+  DB.ins(K.G,{title,cat:document.getElementById('m-gc')?.value||'Pessoal',desc:document.getElementById('m-gd')?.value||'',deadline:document.getElementById('m-gdt')?.value||'',pct:Math.min(100,parseInt(document.getElementById('m-gp')?.value)||0),metric:document.getElementById('m-gm')?.value||''});
+  closeModal();renderGoals();toast('🎯 Meta definida!')
+}
+function addFin(){
+  const valor=parseFloat(document.getElementById('m-fvl')?.value);if(!valor||valor<=0)return toast('⚠️ Valor inválido.');
+  DB.ins(K.F,{type:document.getElementById('m-fty')?.value,origem:document.getElementById('m-for')?.value,cat:document.getElementById('m-fca')?.value,valor,date:document.getElementById('m-fdt')?.value||today(),desc:document.getElementById('m-fds')?.value||''});
+  closeModal();renderFinStats();renderFin();toast('💰 Lançamento registado!')
+}
+function addFGoal(){
+  const title=document.getElementById('m-fgt')?.value.trim(),target=parseFloat(document.getElementById('m-fgv')?.value);
+  if(!title||!target)return toast('⚠️ Preenche título e valor alvo.');
+  DB.ins(K.FG,{title,target,saved:parseFloat(document.getElementById('m-fgs')?.value)||0,deadline:document.getElementById('m-fgd')?.value||''});
+  closeModal();renderFGoals();toast('🏦 Meta financeira guardada!')
+}
+function addIdea(){
+  const title=document.getElementById('m-idt')?.value.trim();if(!title)return toast('⚠️ Dá um título à ideia.');
+  const tags=(document.getElementById('m-idtg')?.value||'').split(',').map(t=>t.trim()).filter(Boolean);
+  DB.ins(K.I,{title,desc:document.getElementById('m-idd')?.value||'',area:document.getElementById('m-ida')?.value||'Outro',status:document.getElementById('m-ids')?.value||'💭 Conceito',tags,impact:Math.min(10,Math.max(1,parseInt(document.getElementById('m-idimp')?.value)||5)),viability:Math.min(10,Math.max(1,parseInt(document.getElementById('m-idvia')?.value)||5)),fav:false});
+  closeModal();renderIdeas();renderMatriz();toast('💡 Ideia guardada!')
+}
+function addMapItem(){
+  const prob=document.getElementById('m-mpp')?.value.trim();if(!prob)return toast('⚠️ Descreve o problema.');
+  const sol=document.getElementById('m-mps')?.value.trim();
+  DB.ins(K.I,{title:prob.slice(0,60),desc:`PROBLEMA: ${prob}\n\nSOLUÇÃO: ${sol}`,area:'Negócio',status:'💭 Conceito',tags:['mapa-valor'],impact:5,viability:5,fav:false});
+  closeModal();renderIdeas();renderMatriz();toast('🗺️ Adicionado ao mapa!')
+}
+function addBook(){
+  const title=document.getElementById('m-bkt')?.value.trim();if(!title)return toast('⚠️ Insere o título.');
+  const topics=(document.getElementById('m-bktp')?.value||'').split(',').map(t=>t.trim()).filter(Boolean);
+  DB.ins(K.B,{title,author:document.getElementById('m-bka')?.value||'',type:document.getElementById('m-bkty')?.value||'📕 Livro',status:document.getElementById('m-bkst')?.value||'📌 Para ver',domain:document.getElementById('m-bkd')?.value||'Básico',pct:parseInt(document.getElementById('m-bkp')?.value)||0,topics,link:document.getElementById('m-bkl')?.value||'',notes:document.getElementById('m-bkn')?.value||''});
+  closeModal();renderLrnStats();renderBooks();toast('📚 Recurso adicionado!')
+}
+function addNote(){
+  const title=document.getElementById('m-ntt')?.value.trim(),content=document.getElementById('m-ntc')?.value.trim();
+  if(!title||!content)return toast('⚠️ Preenche título e conteúdo.');
+  const tags=(document.getElementById('m-nttg')?.value||'').split(',').map(t=>t.trim()).filter(Boolean);
+  DB.ins(K.N,{title,content,source:document.getElementById('m-nts')?.value||'',tags,difficulty:parseInt(document.getElementById('m-ntd')?.value)||3,needReview:document.getElementById('m-ntr')?.checked||false,lastReview:null,reviewCount:0});
+  closeModal();renderLrnStats();renderNotes();renderRevisao();toast('📝 Nota guardada!')
+}
+function addDiary(){
+  const text=document.getElementById('m-rt')?.value.trim();if(!text)return toast('⚠️ Escreve a tua reflexão.');
+  const e=parseInt(document.getElementById('m-re')?.value)||null,p=parseInt(document.getElementById('m-rp')?.value)||null;
+  DB.ins(K.R,{date:document.getElementById('m-rd')?.value||today(),mood:_selMood||'Neutro',energia:e,prod:p,text,wins:document.getElementById('m-rw')?.value||'',gratitude:document.getElementById('m-rg')?.value||''});
+  _selMood='';closeModal();renderDiary();toast('🌟 Entrada guardada!')
+}
+
+// ── AI ADVISOR ───────────────────────────────────────
+async function runAIAnalysis(){
+  const apiKey=DB.gs('apiKey');
+  const noKey=document.getElementById('ai-no-key');
+  const resp=document.getElementById('ai-response');
+  const txt=document.getElementById('ai-text');
+  const btn=document.getElementById('ai-btn');
+  const badge=document.getElementById('ai-badge');
+  const ins=document.getElementById('vida-ins');
+
+  if(!apiKey){
+    if(ins)ins.style.display='none';
+    if(noKey)noKey.style.display='block';
+    if(resp)resp.style.display='none';
+    return;
+  }
+
+  // Build rich data context
+  const tasks=DB.all(K.T),goals=DB.all(K.G),fins=DB.all(K.F),ideas=DB.all(K.I);
+  const books=DB.all(K.B),notes=DB.all(K.N),refs=DB.all(K.R),fgoals=DB.all(K.FG);
+  const sc=calcVida(),avg=Math.round(Object.values(sc).reduce((s,v)=>s+v,0)/6);
+  const rec=fins.filter(f=>f.type==='receita').reduce((s,f)=>s+f.valor,0);
+  const des=fins.filter(f=>f.type==='despesa').reduce((s,f)=>s+f.valor,0);
+  const doneTasks=tasks.filter(t=>t.done).length;
+  const recentRefs=refs.slice(0,5);
+  const urgentTasks=tasks.filter(t=>!t.done&&t.priority==='alta');
+
+  const prompt=`És o Advisor IA do SupurpApp, um assistente de crescimento pessoal e profissional para o Augusto Faztudo Chinjila — Gestor Público, Empreendedor e Inovador em Angola.
+
+DADOS ACTUAIS DO UTILIZADOR:
+
+📊 EQUILÍBRIO DE VIDA (0-100%):
+- Financeiro: ${sc.fin}%
+- Profissional: ${sc.prof}%
+- Aprendizado: ${sc.aprender}%
+- Bem-estar: ${sc.bem}%
+- Inovação: ${sc.inov}%
+- Pessoal: ${sc.pes}%
+- Média geral: ${avg}%
+
+📋 TAREFAS:
+- Total: ${tasks.length} | Concluídas: ${doneTasks} | Pendentes: ${tasks.length-doneTasks}
+- Urgentes por fazer: ${urgentTasks.map(t=>'"'+t.title+'"').join(', ')||'nenhuma'}
+- Tarefas recentes: ${tasks.slice(0,4).map(t=>`"${t.title}" [${t.priority}/${t.cat}]`).join('; ')||'sem dados'}
+
+🎯 METAS:
+${goals.slice(0,5).map(g=>`- "${g.title}" (${g.pct||0}% concluído, prazo: ${g.deadline||'sem prazo'})`).join('\n')||'Sem metas registadas'}
+
+💰 FINANÇAS:
+- Receitas totais: ${fmtKz(rec)}
+- Despesas totais: ${fmtKz(des)}
+- Saldo líquido: ${fmtKz(rec-des)}
+- Metas financeiras: ${fgoals.map(g=>`"${g.title}" ${Math.round((g.saved/g.target)*100||0)}% de ${fmtKz(g.target)}`).join('; ')||'nenhuma'}
+
+💡 INOVAÇÃO:
+- Total de ideias: ${ideas.length}
+- Ideias em destaque: ${ideas.slice(0,3).map(i=>`"${i.title}" [${i.status}]`).join('; ')||'sem ideias'}
+
+📚 APRENDIZADO:
+- Biblioteca: ${books.length} recursos | ${books.filter(b=>b.status==='✅ Concluído').length} concluídos
+- A ler agora: ${books.filter(b=>b.status==='📖 A ver/ler').map(b=>b.title).join(', ')||'nenhum'}
+- Notas de conhecimento: ${notes.length}
+
+📖 DIÁRIO RECENTE (últimas entradas):
+${recentRefs.map(r=>`[${r.date}] Humor: ${r.mood} | Energia: ${r.energia||'?'}/10 | Prod: ${r.prod||'?'}/10 | "${r.text?.slice(0,80)}..."`).join('\n')||'Sem entradas no diário'}
+
+---
+
+Faz uma análise profunda, personalizada e accionável. Estrutura da resposta:
+
+1. **Diagnóstico Rápido** — Em 2-3 frases, qual é o estado real do Augusto hoje?
+2. **3 Pontos Fortes** — O que está a correr bem e porquê importa?
+3. **2 Alertas Críticos** — O que precisa de atenção imediata? (baseia-te nos dados reais)
+4. **Plano de Acção — 3 próximos passos concretos** — Acções específicas para os próximos 7 dias, com base nas tarefas urgentes e metas em risco.
+5. **Insight de Crescimento** — Uma observação estratégica sobre padrões que vês nos dados.
+
+Fala directamente ao Augusto, em português de Angola, de forma honesta, encorajadora mas directa. Máximo 350 palavras.`;
+
+  // UI: loading state
+  if(ins)ins.style.display='none';
+  if(noKey)noKey.style.display='none';
+  if(resp){resp.style.display='block';txt.textContent=''}
+  if(btn){btn.disabled=true;btn.textContent='⏳ A analisar...'}
+  if(badge)badge.textContent='A pensar...';
+
+  // Animate dots while loading
+  let dots=0;
+  const dotAnim=setInterval(()=>{if(txt&&!txt.textContent.includes('\n'))txt.textContent='Aguarda um momento'+'...'.slice(0,++dots%4)},400);
+
+  try{
+    const response=await fetch(`https://api.groq.com/openai/v1/chat/completions`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+apiKey},
+      body:JSON.stringify({
+        model:'llama-3.3-70b-versatile',
+        messages:[{role:'user',content:prompt}],
+        max_tokens:1024,
+        temperature:0.7
+      })
+    });
+
+    clearInterval(dotAnim);
+
+    if(!response.ok){
+      const err=await response.json().catch(()=>({}));
+      throw new Error(err.error?.message||'Erro HTTP '+response.status);
+    }
+
+    const data=await response.json();
+    const content=data.choices?.[0]?.message?.content||'Sem resposta.';
+
+    // Render markdown-lite: bold, bullets
+    const formatted=content
+      .replace(/\*\*(.+?)\*\*/g,'<strong style="color:var(--tx)">$1</strong>')
+      .replace(/^(\d+\.)\s/gm,'<span style="color:var(--gd);font-weight:600">$1</span> ')
+      .replace(/^[-•]\s/gm,'<span style="color:var(--gd)">▸</span> ');
+
+    txt.innerHTML='';
+    // Typewriter effect
+    const chars=formatted.split('');
+    let i=0;
+    txt.style.display='block';
+    const type=()=>{
+      if(i<chars.length){
+        txt.innerHTML=formatted.slice(0,++i);
+        if(i%4===0)setTimeout(type,0);else requestAnimationFrame(type);
+      } else {
+        if(btn){btn.disabled=false;btn.textContent='🔄 Nova análise'}
+        if(badge)badge.innerHTML='Groq <span style="color:var(--gn)">✓</span>';
+      }
+    };
+    requestAnimationFrame(type);
+
+    // Save last analysis
+    DB.ss('lastAIAnalysis',{text:content,date:new Date().toISOString()});
+
+  }catch(err){
+    clearInterval(dotAnim);
+    const msg=err.message||'Erro desconhecido';
+    let friendly=msg;
+    if(msg.includes('400')||msg.includes('API_KEY')||msg.includes('invalid')||msg.includes('401'))friendly='🔑 Chave API inválida. Verifica nas Configurações (deve começar com gsk_...)';
+    else if(msg.includes('429'))friendly='⏱️ Limite atingido. Aguarda um momento e tenta de novo.';
+    else if(msg.includes('fetch')||msg.includes('network')||msg.includes('Failed'))friendly='📡 Sem ligação à internet. Verifica a tua rede.';
+    txt.innerHTML=`<span style="color:var(--rs)">❌ ${friendly}</span>`;
+    if(btn){btn.disabled=false;btn.textContent='🔄 Tentar novamente'}
+    if(badge)badge.textContent='Erro';
+  }
+}
+
+
+function editTask(id){
+  const t=DB.find(K.T,id);if(!t)return;
+  const mb=document.getElementById('modal-bg'),m=document.getElementById('modal');
+  const CATS=['Profissional','AFC Criativa','Ibisner','Pessoal','Estudo','Saúde','Outro'];
+  m.innerHTML=`<div class="mh2"><span class="mt2">Editar Tarefa</span><button class="btn bg-b" style="padding:7px 10px" onclick="closeModal()">✕</button></div>
+  <div class="fr"><div class="fg w2"><label>Título *</label><input id="e-tt" type="text" value="${esc(t.title)}"></div></div>
+  <div class="fr"><div class="fg"><label>Categoria</label><select id="e-tc">${CATS.map(c=>`<option${c===t.cat?' selected':''}>${c}</option>`).join('')}</select></div>
+  <div class="fg"><label>Prioridade</label><select id="e-tp"><option value="alta"${t.priority==='alta'?' selected':''}>Alta</option><option value="média"${t.priority==='média'?' selected':''} >Média</option><option value="baixa"${t.priority==='baixa'?' selected':''}>Baixa</option></select></div>
+  <div class="fg"><label>Data</label><input id="e-td" type="date" value="${t.date||''}"></div></div>
+  <div class="fg" style="margin-bottom:16px"><label>Notas</label><textarea id="e-tn" style="min-height:60px">${esc(t.notes||'')}</textarea></div>
+  <div style="display:flex;gap:10px;justify-content:flex-end"><button class="btn bs" onclick="closeModal()">Cancelar</button><button class="btn bp" onclick="saveEditTask('${id}')">💾 Guardar</button></div>`;
+  mb.classList.add('open');setTimeout(()=>{const fi=m.querySelector('input[type="text"]');if(fi)fi.focus()},80);
+}
+function saveEditTask(id){
+  const title=document.getElementById('e-tt')?.value.trim();if(!title)return toast('⚠️ Insere o título.');
+  DB.upd(K.T,id,{title,cat:document.getElementById('e-tc')?.value,priority:document.getElementById('e-tp')?.value,date:document.getElementById('e-td')?.value,notes:document.getElementById('e-tn')?.value});
+  closeModal();renderTasks();toast('✅ Tarefa actualizada!')
+}
+function editGoal(id){
+  const g=DB.find(K.G,id);if(!g)return;
+  const mb=document.getElementById('modal-bg'),m=document.getElementById('modal');
+  const GCATS=['Financeira','Profissional','Educacional','Saúde','Familiar','Espiritual','Outro'];
+  m.innerHTML=`<div class="mh2"><span class="mt2">Editar Meta</span><button class="btn bg-b" style="padding:7px 10px" onclick="closeModal()">✕</button></div>
+  <div class="fr"><div class="fg w2"><label>Título *</label><input id="eg-t" type="text" value="${esc(g.title)}"></div><div class="fg"><label>Categoria</label><select id="eg-c">${GCATS.map(c=>`<option${c===g.cat?' selected':''}>${c}</option>`).join('')}</select></div></div>
+  <div class="fr"><div class="fg w2"><label>Descrição</label><input id="eg-d" type="text" value="${esc(g.desc||'')}"></div><div class="fg"><label>Prazo</label><input id="eg-dt" type="date" value="${g.deadline||''}"></div></div>
+  <div class="fr"><div class="fg"><label>Progresso (%)</label><input id="eg-p" type="number" min="0" max="100" value="${g.pct||0}"></div><div class="fg w2"><label>Métrica</label><input id="eg-m" type="text" value="${esc(g.metric||'')}"></div></div>
+  <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:4px"><button class="btn bs" onclick="closeModal()">Cancelar</button><button class="btn bp" onclick="saveEditGoal('${id}')">💾 Guardar</button></div>`;
+  mb.classList.add('open');
+}
+function saveEditGoal(id){
+  const title=document.getElementById('eg-t')?.value.trim();if(!title)return toast('⚠️ Insere o título.');
+  DB.upd(K.G,id,{title,cat:document.getElementById('eg-c')?.value,desc:document.getElementById('eg-d')?.value,deadline:document.getElementById('eg-dt')?.value,pct:Math.min(100,parseInt(document.getElementById('eg-p')?.value)||0),metric:document.getElementById('eg-m')?.value});
+  closeModal();renderGoals();toast('🎯 Meta actualizada!')
+}
+function editFin(id){
+  const f=DB.find(K.F,id);if(!f)return;
+  const mb=document.getElementById('modal-bg'),m=document.getElementById('modal');
+  const ORIGS=['AFC Criativa','Ibisner Solutions','Salário','Freelance','Investimento','Outro'];
+  const FCATS=['Operacional','Fixo','Variável','Educação','Saúde','Lazer','Investimento'];
+  m.innerHTML=`<div class="mh2"><span class="mt2">Editar Lançamento</span><button class="btn bg-b" style="padding:7px 10px" onclick="closeModal()">✕</button></div>
+  <div class="fr"><div class="fg"><label>Tipo</label><select id="ef-ty"><option value="receita"${f.type==='receita'?' selected':''}>💚 Receita</option><option value="despesa"${f.type==='despesa'?' selected':''}>🔴 Despesa</option><option value="investimento"${f.type==='investimento'?' selected':''}>🔵 Investimento</option></select></div>
+  <div class="fg"><label>Origem</label><select id="ef-or">${ORIGS.map(o=>`<option${o===f.origem?' selected':''}>${o}</option>`).join('')}</select></div>
+  <div class="fg"><label>Categoria</label><select id="ef-ca">${FCATS.map(c=>`<option${c===f.cat?' selected':''}>${c}</option>`).join('')}</select></div></div>
+  <div class="fr"><div class="fg"><label>Valor (Kz)</label><input id="ef-vl" type="number" value="${f.valor}" step="0.01"></div><div class="fg"><label>Data</label><input id="ef-dt" type="date" value="${f.date||''}"></div></div>
+  <div class="fg" style="margin-bottom:16px"><label>Descrição</label><input id="ef-ds" type="text" value="${esc(f.desc||'')}"></div>
+  <div style="display:flex;gap:10px;justify-content:flex-end"><button class="btn bs" onclick="closeModal()">Cancelar</button><button class="btn bp" onclick="saveEditFin('${id}')">💾 Guardar</button></div>`;
+  mb.classList.add('open');
+}
+function saveEditFin(id){
+  const valor=parseFloat(document.getElementById('ef-vl')?.value);if(!valor||valor<=0)return toast('⚠️ Valor inválido.');
+  DB.upd(K.F,id,{type:document.getElementById('ef-ty')?.value,origem:document.getElementById('ef-or')?.value,cat:document.getElementById('ef-ca')?.value,valor,date:document.getElementById('ef-dt')?.value,desc:document.getElementById('ef-ds')?.value});
+  closeModal();renderFinStats();renderFin();toast('💰 Lançamento actualizado!')
+}
+function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;')}
+
+// ── SEED DATA ────────────────────────────────────────
+function seedData(){
+  if(DB.all(K.T).length||DB.all(K.G).length)return; // already has data
+  const t=today();
+  // Tasks
+  DB.ins(K.T,{title:'Preparar proposta para cliente Ibisner',cat:'Profissional',priority:'alta',date:t,notes:'Incluir cronograma e orçamento detalhado',tags:['proposta','cliente'],subtasks:[{id:uid(),title:'Rascunho inicial',done:true},{id:uid(),title:'Revisão com equipa',done:false},{id:uid(),title:'Envio ao cliente',done:false}],goalId:'',done:false});
+  DB.ins(K.T,{title:'Estudar Lean Canvas para novo projecto',cat:'Estudo',priority:'média',date:t,notes:'',tags:['empreendedorismo'],subtasks:[],goalId:'',done:false});
+  DB.ins(K.T,{title:'Exercício matinal 30 min',cat:'Saúde',priority:'baixa',date:t,notes:'',tags:['saúde','rotina'],subtasks:[],goalId:'',done:true});
+  // Goals
+  DB.ins(K.G,{title:'Facturar 500.000 Kz/mês até Q3',cat:'Financeira',desc:'Combinando AFC Criativa e Ibisner Solutions',deadline:'2026-09-30',pct:32,metric:'Receitas mensais combinadas'});
+  DB.ins(K.G,{title:'Lançar plataforma SaaS Ibisner',cat:'Profissional',desc:'MVP funcional com primeiros 10 clientes',deadline:'2026-12-31',pct:18,metric:'10 clientes pagantes'});
+  DB.ins(K.G,{title:'Ler 12 livros em 2026',cat:'Educacional',desc:'1 livro por mês nas áreas de gestão e inovação',deadline:'2026-12-31',pct:25,metric:'3/12 livros lidos'});
+  // Finances
+  DB.ins(K.F,{type:'receita',origem:'AFC Criativa',cat:'Operacional',valor:85000,date:t,desc:'Projecto identidade visual – Cliente A'});
+  DB.ins(K.F,{type:'receita',origem:'Ibisner Solutions',cat:'Operacional',valor:120000,date:t,desc:'Consultoria tecnológica – Q1'});
+  DB.ins(K.F,{type:'despesa',origem:'Outro',cat:'Operacional',valor:35000,date:t,desc:'Software e subscrições mensais'});
+  DB.ins(K.F,{type:'investimento',origem:'Investimento',cat:'Investimento',valor:50000,date:t,desc:'Fundo de reserva empresarial'});
+  // Ideas
+  DB.ins(K.I,{title:'App de Gestão de Eventos Angolanos',desc:'Plataforma para organizar, promover e vender bilhetes para eventos em Angola. Integração com M-Pesa e TPA.',area:'Tecnologia',status:'🔬 Validando',tags:['fintech','eventos','angola'],impact:8,viability:6,fav:true});
+  DB.ins(K.I,{title:'Curso Online: Empreendedorismo em Angola',desc:'Formação prática sobre como criar e gerir empresas no contexto angolano.',area:'Educação',status:'💭 Conceito',tags:['educação','empreendedorismo'],impact:7,viability:8,fav:false});
+  DB.ins(K.I,{title:'Consultoria de Transformação Digital para PMEs',desc:'Ajudar pequenas e médias empresas angolanas a digitalizar processos e ganhar eficiência.',area:'Negócio',status:'⚙️ Prototipando',tags:['digital','pme','angola'],impact:9,viability:7,fav:true});
+  // Books
+  DB.ins(K.B,{title:'Zero to One',author:'Peter Thiel',type:'📕 Livro',status:'✅ Concluído',domain:'Avançado',pct:100,topics:['empreendedorismo','inovação','startups'],link:'',notes:'Mudou completamente a minha forma de pensar sobre criação de valor.'});
+  DB.ins(K.B,{title:'The Lean Startup',author:'Eric Ries',type:'📕 Livro',status:'📖 A ver/ler',domain:'Intermédio',pct:60,topics:['lean','startups','produto'],link:'',notes:'MVP e ciclos de feedback são essenciais.'});
+  DB.ins(K.B,{title:'Curso: Growth Hacking na Prática',author:'Digital House',type:'🎓 Curso',status:'📌 Para ver',domain:'Básico',pct:0,topics:['marketing','crescimento','digital'],link:'https://digitalhouse.com',notes:''});
+  // Notes
+  DB.ins(K.N,{title:'Ciclo Build-Measure-Learn',content:'O ciclo BML do Lean Startup: construir um MVP mínimo, medir com métricas accionáveis e aprender com dados reais. Nunca assumir — sempre validar com o mercado.',source:'The Lean Startup',tags:['lean','produto','validação'],difficulty:2,needReview:true,lastReview:null,reviewCount:0});
+  // Financial Goals
+  DB.ins(K.FG,{title:'Fundo de Emergência (6 meses)',target:300000,saved:95000,deadline:'2026-08-31'});
+  DB.ins(K.FG,{title:'Capital para expansão AFC Criativa',target:500000,saved:120000,deadline:'2026-12-31'});
+  // Diary
+  const d=new Date();d.setDate(d.getDate()-1);const yd=d.toISOString().split('T')[0];
+  DB.ins(K.R,{date:yd,mood:'🔥 Motivado',energia:8,prod:7,text:'Dia produtivo. Fechei proposta para novo cliente Ibisner e dediquei 2 horas ao estudo do Lean Startup. Sinto que estou a construir algo real.',wins:'Proposta enviada, 2h de estudo',gratitude:'Pela saúde e pela clareza de visão'});
+  toast('👋 Dados de exemplo carregados! Explora o app.');
+}
+
+// ── INIT ──────────────────────────────────────────────
+function init(){
+  const theme=DB.gs('theme','dark');document.documentElement.setAttribute('data-theme',theme);
+  const fs=DB.gs('fontSize');if(fs)document.documentElement.style.fontSize=fs;
+  document.addEventListener('keydown',e=>{
+    if(e.key==='Escape')closeModal();
+    if(e.key==='Enter'&&e.ctrlKey&&document.getElementById('modal-bg').classList.contains('open')){
+      if(curPg==='plan')addTask();else if(curPg==='fin')addFin();else if(curPg==='ideias')addIdea();else if(curPg==='reflex')addDiary();
+    }
+  });
+  updPomoStats();seedData();renderDash();updTopbar();setInterval(updTopbar,60000);
+}
+window.addEventListener('DOMContentLoaded',init);
+</script>
+</body>
+</html>
