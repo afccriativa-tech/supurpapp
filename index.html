@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0a0b0f">
+<meta name="theme-color" content="#0f1419">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<title>SupurpApp v2.0</title>
+<title>Kimbuka - Gestão Estratégica</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
-:root,[data-theme="dark"]{--bg:#0a0b0f;--sf:#111318;--sf2:#181b24;--bd:#2a2d3e;--bd2:#3a3d52;--gd:#e8b84b;--gd2:#b8882a;--glow:rgba(232,184,75,.15);--gsub:rgba(232,184,75,.07);--bl:#5b8af0;--tl:#4ecdc4;--rs:#e05c6e;--gn:#4caf7d;--pu:#9b7fe8;--or:#f0884a;--tx:#f0ede8;--tx2:#9096b0;--tx3:#555970;--sh:0 4px 24px rgba(0,0,0,.5)}
-[data-theme="light"]{--bg:#f5f4f0;--sf:#fff;--sf2:#f0eee9;--bd:#ddd9d0;--bd2:#c8c3b8;--gd:#b8882a;--gd2:#8a6420;--glow:rgba(184,136,42,.12);--gsub:rgba(184,136,42,.06);--bl:#3a6bd4;--tl:#2aada5;--rs:#c04050;--gn:#2d8a5a;--pu:#7055c8;--or:#d4642a;--tx:#1a1c24;--tx2:#5a5f78;--tx3:#9096b0;--sh:0 4px 24px rgba(0,0,0,.1)}
+:root,[data-theme="dark"]{--bg:#0f1419;--sf:#1a1d2e;--sf2:#252a3a;--bd:#3a3d52;--bd2:#4a4d62;--gd:#d4af37;--gd2:#e8c547;--glow:rgba(212,175,55,.15);--gsub:rgba(212,175,55,.07);--bl:#3b82f6;--tl:#2d9d78;--rs:#ef4444;--gn:#2d9d78;--pu:#9b7fe8;--or:#f0884a;--tx:#f5f5f5;--tx2:#9ca3af;--tx3:#6b7280;--sh:0 4px 24px rgba(0,0,0,.5)}
+[data-theme="light"]{--bg:#f5f4f0;--sf:#fff;--sf2:#f0eee9;--bd:#ddd9d0;--bd2:#c8c3b8;--gd:#d4af37;--gd2:#e8c547;--glow:rgba(212,175,55,.12);--gsub:rgba(212,175,55,.06);--bl:#3b82f6;--tl:#2d9d78;--rs:#ef4444;--gn:#2d9d78;--pu:#7055c8;--or:#f0884a;--tx:#1a1c24;--tx2:#5a5f78;--tx3:#9096b0;--sh:0 4px 24px rgba(0,0,0,.1)}
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 html{font-size:16px}
 body{font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--tx);height:100vh;overflow:hidden;display:flex;transition:background .3s,color .3s}
@@ -205,8 +205,8 @@ input[type="range"]:focus{border-color:transparent;box-shadow:none}
   <script>
     // PWA Manifest inline
     const manifest = {
-      name: "SupurpApp — Painel da Vida",
-      short_name: "SupurpApp",
+      name: "Kimbuka — Painel da Vida",
+      short_name: "Kimbuka",
       start_url: ".",
       display: "standalone",
       background_color: "#1a1a2e",
@@ -226,7 +226,7 @@ input[type="range"]:focus{border-color:transparent;box-shadow:none}
 </head>
 <body>
 <nav id="sb">
-  <div class="brand"><div class="brand-icon">S</div><div><div class="brand-text">SupurpApp</div><div class="brand-ver">v2.0</div></div></div>
+  <div class="brand"><div class="brand-icon">S</div><div><div class="brand-text">Kimbuka</div><div class="brand-ver">v1.0</div></div></div>
   <div class="nsl">Geral</div>
   <div class="ni act" onclick="goTo('dashboard')"><span class="ni-ic">📊</span><span class="ni-lb">Dashboard</span></div>
   <div class="ni" onclick="goTo('painel')"><span class="ni-ic">🌐</span><span class="ni-lb">Painel da Vida</span></div>
@@ -523,7 +523,7 @@ input[type="range"]:focus{border-color:transparent;box-shadow:none}
 
 <!-- CONFIG -->
 <div id="pg-config" class="pg">
-  <div class="mb24"><h1 class="ptit">Configurações & Backup</h1><p class="psub">Personalização, dados e sobre o SupurpApp.</p></div>
+  <div class="mb24"><h1 class="ptit">Configurações & Backup</h1><p class="psub">Personalização, dados e sobre o Kimbuka.</p></div>
   <div class="g2">
     <div>
       <div class="card mb16">
@@ -542,7 +542,7 @@ input[type="range"]:focus{border-color:transparent;box-shadow:none}
       </div>
       <div class="card">
         <div class="ch"><span class="sh">🤖 Advisor IA — Groq</span><span class="bdg dg-gn">Grátis</span></div>
-        <p class="tsm td" style="margin-bottom:14px;line-height:1.6">Liga o SupurpApp ao Google Gemini para análise real dos teus dados. <strong style="color:var(--gn)">100% gratuito</strong> — sem cartão de crédito.</p>
+        <p class="tsm td" style="margin-bottom:14px;line-height:1.6">Liga o Kimbuka ao Google Gemini para análise real dos teus dados. <strong style="color:var(--gn)">100% gratuito</strong> — sem cartão de crédito.</p>
         <div class="fg mb16">
           <label>Chave API Groq</label>
           <div style="display:flex;gap:8px;margin-top:6px">
@@ -573,13 +573,13 @@ input[type="range"]:focus{border-color:transparent;box-shadow:none}
         </div>
       </div>
       <div class="card mb16"><div class="ch"><span class="sh">Notificações PWA</span></div><button class="btn bs bfl mb16" onclick="reqNotif()">🔔 Activar Notificações</button><p class="txs tdm">Lembretes de tarefas e ciclos Pomodoro com o browser em segundo plano.</p></div>
-      <div class="card"><div class="ch"><span class="sh">Sobre o SupurpApp</span></div><div class="tsm td" style="line-height:1.8"><div class="fx fjb"><span>Versão</span><span class="mn">2.0.0</span></div><div class="fx fjb"><span>Tipo</span><span>PWA · Offline-first</span></div><div class="fx fjb"><span>Armazenamento</span><span>localStorage</span></div><div class="fx fjb"><span>Idioma</span><span>Português (Angola)</span></div></div><p class="txs tdm" style="margin-top:14px;padding-top:12px;border-top:1px solid var(--bd)">Criado para ser a plataforma central de crescimento pessoal e profissional do Augusto Faztudo Chinjila. Privado, seguro e offline.</p></div>
+      <div class="card"><div class="ch"><span class="sh">Sobre o Kimbuka</span></div><div class="tsm td" style="line-height:1.8"><div class="fx fjb"><span>Versão 1.0.0</span></div><div class="fx fjb"><span>Tipo</span><span>PWA · Offline-first</span></div><div class="fx fjb"><span>Armazenamento</span><span>localStorage</span></div><div class="fx fjb"><span>Idioma</span><span>Português (Angola)</span></div></div><p class="txs tdm" style="margin-top:14px;padding-top:12px;border-top:1px solid var(--bd)">Criado para ser a plataforma central de crescimento pessoal e profissional do Augusto Faztudo Chinjila. Privado, seguro e offline.</p></div>
     </div>
   </div>
 </div>
 
   </div><!-- /ca -->
-  <div id="ft"><span>SupurpApp v2.0 · AFC Criativa / Ibisner Solutions</span><span id="ft-sync" class="mn">—</span></div>
+  <div id="ft"><span>Kimbuka v1.0 · AFC Criativa / Ibisner Solutions</span><span id="ft-sync" class="mn">—</span></div>
 </div><!-- /main -->
 <div id="modal-bg" onclick="if(event.target===this)closeModal()"><div id="modal"></div></div>
 <div id="toast"></div>
@@ -596,8 +596,8 @@ const DB={
   gs(k,d=null){return(DB.get(K.S,{}))[k]??d},
   ss(k,v){const s=DB.get(K.S,{});s[k]=v;DB.set(K.S,s)},
   stats(){let b=0;Object.values(K).forEach(k=>{const v=localStorage.getItem(k);if(v)b+=v.length*2});return{items:Object.values(K).reduce((s,k)=>{const v=DB.all(k);return s+(Array.isArray(v)?v.length:0)},0),kb:(b/1024).toFixed(2),last:DB.get(K.M,{}).lastSaved||null}},
-  export(){const d={_v:'2.0',_app:'SupurpApp',_exp:new Date().toISOString()};Object.entries(K).forEach(([n,k])=>{d[n]=DB.get(k,n==='S'?{}:[])});return d},
-  import(data){if(!data||data._app!=='SupurpApp')throw new Error('Ficheiro inválido.');Object.entries(K).forEach(([n,k])=>{if(data[n]!==undefined)DB.set(k,data[n])})}
+  export(){const d={_v:'2.0',_app:'Kimbuka',_exp:new Date().toISOString()};Object.entries(K).forEach(([n,k])=>{d[n]=DB.get(k,n==='S'?{}:[])});return d},
+  import(data){if(!data||data._app!=='Kimbuka')throw new Error('Ficheiro inválido.');Object.entries(K).forEach(([n,k])=>{if(data[n]!==undefined)DB.set(k,data[n])})}
 };
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
 function today(){return new Date().toISOString().split('T')[0]}
@@ -1012,7 +1012,7 @@ function renderConfig(){
   const dk=document.getElementById('t-dk'),lt=document.getElementById('t-lt');
   if(dk)dk.className='btn '+(cur==='dark'?'bp':'bs');if(lt)lt.className='btn '+(cur==='light'?'bp':'bs');
 }
-function exportBackup(){const d=DB.export();const b=new Blob([JSON.stringify(d,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='supurpapp-backup-'+today()+'.json';a.click();toast('💾 Backup exportado!')}
+function exportBackup(){const d=DB.export();const b=new Blob([JSON.stringify(d,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='kimbuka-backup-'+today()+'.json';a.click();toast('💾 Backup exportado!')}
 function importBackup(input){const file=input.files[0];if(!file)return;const r=new FileReader();r.onload=e=>{try{const d=JSON.parse(e.target.result);DB.import(d);toast('✅ Importado! A recarregar...');setTimeout(()=>location.reload(),1500)}catch(err){toast('❌ Erro: '+err.message)}};r.readAsText(file)}
 function resetApp(){if(!confirm('⚠️ Apagar TODOS os dados? Irreversível!'))return;if(!confirm('Confirmação final?'))return;Object.values(K).forEach(k=>localStorage.removeItem(k));toast('Reposto. A recarregar...');setTimeout(()=>location.reload(),1200)}
 async function reqNotif(){if(!('Notification' in window))return toast('Não suportado.');const p=await Notification.requestPermission();toast(p==='granted'?'🔔 Activadas!':'Permissão negada.')}
@@ -1132,7 +1132,7 @@ async function runAIAnalysis(){
   const recentRefs=refs.slice(0,5);
   const urgentTasks=tasks.filter(t=>!t.done&&t.priority==='alta');
 
-  const prompt=`És o Advisor IA do SupurpApp, um assistente de crescimento pessoal e profissional para o Augusto Faztudo Chinjila — Gestor Público, Empreendedor e Inovador em Angola.
+  const prompt=`És o Advisor IA do Kimbuka, um assistente de crescimento pessoal e profissional para o Augusto Faztudo Chinjila — Gestor Público, Empreendedor e Inovador em Angola.
 
 DADOS ACTUAIS DO UTILIZADOR:
 
